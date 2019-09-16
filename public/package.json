@@ -1,0 +1,15 @@
+{
+  "name": "planete_generator",
+  "version": "1.0.0",
+  "description": "A P5.js 3D planete generator",
+  "main": "index.html",
+  "dependencies": {
+    "bootstrap": "^4.3.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "xLeDocteurx",
+  "license": "ISC"
+}

@@ -1,0 +1,12 @@
+body {
+	font-family: Helvetica, Geneva, Arial, SunSans-Regular, sans-serif;
+}
+
+a{
+color:brown;
+font-weight:bold;
+text-decoration:none;
+}
+a:hover{color:red;}
+a:active{color:blue;}
+

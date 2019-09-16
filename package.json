@@ -1,0 +1,15 @@
+{
+  "name": "planete_generator",
+  "version": "1.0.0",
+  "description": "A small P5.js 3D planets generator",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "xLeDocteurx",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
