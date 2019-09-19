@@ -4,7 +4,8 @@
   "description": "A P5.js 3D planete generator",
   "main": "index.html",
   "dependencies": {
-    "bootstrap": "^4.3.1"
+    "bootstrap": "^4.3.1",
+    "jquery": "^3.4.1"
   },
   "devDependencies": {},
   "scripts": {
