@@ -43,7 +43,7 @@ function setup() {
 	sizeSlider.position(10, 40);
 	size = sizeSlider.value();
 
-	resolutionSlider = createSlider(2, 50, 4);
+	resolutionSlider = createSlider(2, 25, 4);
 	resolutionSlider.position(10, 10);
 	resolution = resolutionSlider.value();
 
@@ -51,6 +51,10 @@ function setup() {
 
   	// noLoop();
 
+}
+
+function setupUI() {
+	
 }
 
 function draw() {
