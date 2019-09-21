@@ -13,6 +13,8 @@ A small P5.js planets 3D generator
 - Struggle to developp a terrain erosion algorythm.
 - Bouyakasha.
 
+
+
 ##### Pros :
 - Is using P5 to interface datas to webGL
 - Homemade algorythm to calculate the verteces of the sphere.
