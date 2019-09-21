@@ -20,6 +20,7 @@ let fov;
 let renderer;
 
 let controls;
+let gui;
 
 
 
@@ -36,7 +37,7 @@ setup();
 function preload() {
 
 	size = 300;
-	resolution = 32;
+	resolution = 16;
 
 	fov = 2000;
 
@@ -53,33 +54,71 @@ function setup() {
 	scene = new THREE.Scene();
 	camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, fov );
 
-	// scene.add( new THREE.AmbientLight( 0x222222 ) );
-	
-	renderer = new THREE.WebGLRenderer();
+	renderer = new THREE.WebGLRenderer({antialias: true});
+	renderer.setPixelRatio(window.devicePixelRatio);
 	renderer.setSize( window.innerWidth, window.innerHeight );
 	document.body.appendChild( renderer.domElement );
 
 	controls = new THREE.OrbitControls(camera, renderer.domElement);
 
-	camera.position.z = 500;
+	camera.position.z = size*3;
 
+	const ambiantLight = new THREE.AmbientLight(0xFFFFFF, 1.0);
+	//Create a DirectionalLight and turn on shadows for the light
+	var directionnalLight = new THREE.DirectionalLight( 0xffffff, 1, 100 );
+	directionnalLight.position.set( 0, 1, 0 ); 			//default; directionnalLight shining from top
+	directionnalLight.castShadow = true;            // default false
+	let pointLight1 = new THREE.PointLight( 0xffffff, 1, 0 );
+	let pointLight2 = new THREE.PointLight( 0xffffff, 1, 0 );
+	let pointLight3 = new THREE.PointLight( 0xffffff, 1, 0 );
+	pointLight1.position.set(0, size*8, 0);
+	pointLight2.position.set(size*4, size*8, size*4);
+	pointLight3.position.set(-size*4, -size*8, -size*4);
+	const pointLight = new THREE.PointLight(0x222222, 1.0);
+	const spotLight = new THREE.SpotLight(0x222222, 1.0);
+	
+	// scene.add(ambiantLight);
+	// scene.add(directionnalLight);
+	scene.add(pointLight1);
+	scene.add(pointLight2);
+	scene.add(pointLight3);
 
+	// Normal, Constant, Lambert, Phong, Blinn. materials type
+	// const material = new THREE.MeshLambertMaterial({			
+	var lineMaterial = new THREE.LineBasicMaterial({
+		color: 0xffffff, 
+		transparent: true, 
+		opacity: 0.5
+	});
+	var meshMaterial = new THREE.MeshPhongMaterial({
+		color: 0x156289, 
+		emissive: 0x072534, 
+		side: THREE.DoubleSide, 
+		flatShading: true
+	});
 
-	const material = new THREE.MeshBasicMaterial({
-		color: 0xffff00,
-		wireframe: true,
+	const material = new THREE.MeshLambertMaterial({
+		color: 0x156289,
+		// wireframe: true,
 		side: THREE.DoubleSide,
 	});
+	const toonMaterial = new THREE.MeshToonMaterial({
+		color: 0xffff00,
+		// wireframe: true,
+		// side: THREE.DoubleSide,
+	});
+
 	planete.init(size, resolution);
-	planete.draw(material);
+	planete.draw(lineMaterial, meshMaterial);
+	// planete.draw(material);
 	
-
-
 	window.addEventListener("resize", () => windowResized());
 
 }
 
 function setupUI() {
+
+	// gui = new THREE.GUI();
 
 	// sizeSlider = createSlider(100, 1000, 300);
 	// sizeSlider.position(10, 40);
@@ -93,6 +132,9 @@ function setupUI() {
 }
 
 const update = function(){
+
+	// planete.rotation.x += 0.01;
+	// planete.rotation.y += 0.01;
 
 }
 

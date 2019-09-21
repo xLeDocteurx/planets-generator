@@ -7,6 +7,18 @@ Update : Went from P5.js to Three.js. P5 had a really low framerate at high reso
 
 ![cubes view](https://github.com/xLeDocteurx/planets-generator/blob/master/git/sc001.png)
 
+### How it works :
+For now it's a raw prototype.
+The magic append in 4 core loops, functions. (preload, setup, update, render)
+
+preload
+
+setup
+
+update
+
+render
+
 ### Things to come :
 - ~~Draw a 3D cube.~~
 - ~~Extrapolate the veteces depending on their distance from the center of the cube.~~

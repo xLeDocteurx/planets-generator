@@ -1,9 +1,10 @@
 class ThreeCube {
 
-	constructor(material) {
+	constructor(firstMaterial, secondMaterial) {
 		this.faces = null;
 		this.farestVertex = null;
-		this.material = material;
+		this.firstMaterial = firstMaterial;
+		this.secondMaterial = secondMaterial;
 	}
 
 	init(size, resolution){
@@ -26,9 +27,9 @@ class ThreeCube {
 		this.farestVertex = v1.distanceTo(v2);
 	}
 
-	draw(material){
+	draw(firstMaterial, secondMaterial){
 		this.faces.forEach((face, face_i) => {
-			face.draw(material);
+			face.draw(firstMaterial, secondMaterial);
 		});
 	}
 
@@ -41,7 +42,7 @@ class Face {
 	}
 
 	// TO DO ( éviter la répétition dans la fonction init() )
-	makeVertexForAFace(originVertex,farestVertex,x,y,z){
+	normaliseVertexForAFace(originVertex,farestVertex,x,y,z){
 
 		const h1 = new THREE.Vector3(0,0,0);
 		const h2 = new THREE.Vector3(x,y,z);
@@ -71,27 +72,27 @@ class Face {
 			    		const ax = originVertex.x+x*sliceSize;
 			    		const ay = originVertex.y+y*sliceSize;
 			    		const az = originVertex.z;
-					    this.verteces.push(this.makeVertexForAFace(originVertex,farestVertex,ax,ay,az));
+					    this.verteces.push(this.normaliseVertexForAFace(originVertex,farestVertex,ax,ay,az));
 			    		const bx = originVertex.x+(x+1)*sliceSize;
 			    		const by = originVertex.y+(y+1)*sliceSize;
 			    		const bz = originVertex.z;
-					    this.verteces.push(this.makeVertexForAFace(originVertex,farestVertex,bx,by,bz));
+					    this.verteces.push(this.normaliseVertexForAFace(originVertex,farestVertex,bx,by,bz));
 			    		const cx = originVertex.x+x*sliceSize;
 			    		const cy = originVertex.y+(y+1)*sliceSize;
 			    		const cz = originVertex.z;
-					    this.verteces.push(this.makeVertexForAFace(originVertex,farestVertex,cx,cy,cz));
+					    this.verteces.push(this.normaliseVertexForAFace(originVertex,farestVertex,cx,cy,cz));
 			    		const dx = originVertex.x+x*sliceSize;
 			    		const dy = originVertex.y+y*sliceSize;
 			    		const dz = originVertex.z;
-					    this.verteces.push(this.makeVertexForAFace(originVertex,farestVertex,dx,dy,dz));
+					    this.verteces.push(this.normaliseVertexForAFace(originVertex,farestVertex,dx,dy,dz));
 			    		const ex = originVertex.x+(x+1)*sliceSize;
 			    		const ey = originVertex.y+y*sliceSize;
 			    		const ez = originVertex.z;
-					    this.verteces.push(this.makeVertexForAFace(originVertex,farestVertex,ex,ey,ez));
+					    this.verteces.push(this.normaliseVertexForAFace(originVertex,farestVertex,ex,ey,ez));
 			    		const fx = originVertex.x+(x+1)*sliceSize;
 			    		const fy = originVertex.y+(y+1)*sliceSize;
 			    		const fz = originVertex.z;
-					    this.verteces.push(this.makeVertexForAFace(originVertex,farestVertex,fx,fy,fz));
+					    this.verteces.push(this.normaliseVertexForAFace(originVertex,farestVertex,fx,fy,fz));
 				}
 			}
   		} else if(face_index == 1) {
@@ -103,27 +104,27 @@ class Face {
 			    		const ax = originVertex.x+x*sliceSize;
 			    		const ay = originVertex.y+y*sliceSize;
 			    		const az = originVertex.z;
-					    this.verteces.push(this.makeVertexForAFace(originVertex,farestVertex,ax,ay,az));
+					    this.verteces.push(this.normaliseVertexForAFace(originVertex,farestVertex,ax,ay,az));
 			    		const bx = originVertex.x+(x+1)*sliceSize;
 			    		const by = originVertex.y+y*sliceSize;
 			    		const bz = originVertex.z;
-					    this.verteces.push(this.makeVertexForAFace(originVertex,farestVertex,bx,by,bz));
+					    this.verteces.push(this.normaliseVertexForAFace(originVertex,farestVertex,bx,by,bz));
 			    		const cx = originVertex.x+x*sliceSize;
 			    		const cy = originVertex.y+(y+1)*sliceSize;
 			    		const cz = originVertex.z;
-					    this.verteces.push(this.makeVertexForAFace(originVertex,farestVertex,cx,cy,cz));
+					    this.verteces.push(this.normaliseVertexForAFace(originVertex,farestVertex,cx,cy,cz));
 			    		const dx = originVertex.x+x*sliceSize;
 			    		const dy = originVertex.y+(y+1)*sliceSize;
 			    		const dz = originVertex.z;
-					    this.verteces.push(this.makeVertexForAFace(originVertex,farestVertex,dx,dy,dz));
+					    this.verteces.push(this.normaliseVertexForAFace(originVertex,farestVertex,dx,dy,dz));
 			    		const ex = originVertex.x+(x+1)*sliceSize;
 			    		const ey = originVertex.y+y*sliceSize;
 			    		const ez = originVertex.z;
-					    this.verteces.push(this.makeVertexForAFace(originVertex,farestVertex,ex,ey,ez));
+					    this.verteces.push(this.normaliseVertexForAFace(originVertex,farestVertex,ex,ey,ez));
 			    		const fx = originVertex.x+(x+1)*sliceSize;
 			    		const fy = originVertex.y+(y+1)*sliceSize;
 			    		const fz = originVertex.z;
-					    this.verteces.push(this.makeVertexForAFace(originVertex,farestVertex,fx,fy,fz));
+					    this.verteces.push(this.normaliseVertexForAFace(originVertex,farestVertex,fx,fy,fz));
 				}
 			}
 		// Y axis faces
@@ -136,27 +137,27 @@ class Face {
 			    		const ax = originVertex.x;
 			    		const ay = originVertex.y+y*sliceSize;
 			    		const az = originVertex.z+(x+1)*sliceSize;
-					    this.verteces.push(this.makeVertexForAFace(originVertex,farestVertex,ax,ay,az));
+					    this.verteces.push(this.normaliseVertexForAFace(originVertex,farestVertex,ax,ay,az));
 			    		const bx = originVertex.x;
 			    		const by = originVertex.y+(y+1)*sliceSize;
 			    		const bz = originVertex.z+(x+1)*sliceSize;
-					    this.verteces.push(this.makeVertexForAFace(originVertex,farestVertex,bx,by,bz));
+					    this.verteces.push(this.normaliseVertexForAFace(originVertex,farestVertex,bx,by,bz));
 			    		const cx = originVertex.x;
 			    		const cy = originVertex.y+(y+1)*sliceSize;
 			    		const cz = originVertex.z+x*sliceSize;
-					    this.verteces.push(this.makeVertexForAFace(originVertex,farestVertex,cx,cy,cz));
+					    this.verteces.push(this.normaliseVertexForAFace(originVertex,farestVertex,cx,cy,cz));
 			    		const dx = originVertex.x;
 			    		const dy = originVertex.y+y*sliceSize;
 			    		const dz = originVertex.z+x*sliceSize;
-					    this.verteces.push(this.makeVertexForAFace(originVertex,farestVertex,dx,dy,dz));
+					    this.verteces.push(this.normaliseVertexForAFace(originVertex,farestVertex,dx,dy,dz));
 			    		const ex = originVertex.x;
 			    		const ey = originVertex.y+y*sliceSize;
 			    		const ez = originVertex.z+(x+1)*sliceSize;
-					    this.verteces.push(this.makeVertexForAFace(originVertex,farestVertex,ex,ey,ez));
+					    this.verteces.push(this.normaliseVertexForAFace(originVertex,farestVertex,ex,ey,ez));
 			    		const fx = originVertex.x;
 			    		const fy = originVertex.y+(y+1)*sliceSize;
 			    		const fz = originVertex.z+x*sliceSize;
-					    this.verteces.push(this.makeVertexForAFace(originVertex,farestVertex,fx,fy,fz));
+					    this.verteces.push(this.normaliseVertexForAFace(originVertex,farestVertex,fx,fy,fz));
 				}
 			}
   		} else if(face_index == 3) {
@@ -168,27 +169,27 @@ class Face {
 			    		const ax = originVertex.x;
 			    		const ay = originVertex.y+y*sliceSize;
 			    		const az = originVertex.z+x*sliceSize;
-					    this.verteces.push(this.makeVertexForAFace(originVertex,farestVertex,ax,ay,az));
+					    this.verteces.push(this.normaliseVertexForAFace(originVertex,farestVertex,ax,ay,az));
 			    		const bx = originVertex.x;
 			    		const by = originVertex.y+(y+1)*sliceSize;
 			    		const bz = originVertex.z+(x+1)*sliceSize;
-					    this.verteces.push(this.makeVertexForAFace(originVertex,farestVertex,bx,by,bz));
+					    this.verteces.push(this.normaliseVertexForAFace(originVertex,farestVertex,bx,by,bz));
 			    		const cx = originVertex.x;
 			    		const cy = originVertex.y+(y+1)*sliceSize;
 			    		const cz = originVertex.z+x*sliceSize;
-					    this.verteces.push(this.makeVertexForAFace(originVertex,farestVertex,cx,cy,cz));
+					    this.verteces.push(this.normaliseVertexForAFace(originVertex,farestVertex,cx,cy,cz));
 			    		const dx = originVertex.x;
 			    		const dy = originVertex.y+y*sliceSize;
 			    		const dz = originVertex.z+x*sliceSize;
-					    this.verteces.push(this.makeVertexForAFace(originVertex,farestVertex,dx,dy,dz));
+					    this.verteces.push(this.normaliseVertexForAFace(originVertex,farestVertex,dx,dy,dz));
 			    		const ex = originVertex.x;
 			    		const ey = originVertex.y+y*sliceSize;
 			    		const ez = originVertex.z+(x+1)*sliceSize;
-					    this.verteces.push(this.makeVertexForAFace(originVertex,farestVertex,ex,ey,ez));
+					    this.verteces.push(this.normaliseVertexForAFace(originVertex,farestVertex,ex,ey,ez));
 			    		const fx = originVertex.x;
 			    		const fy = originVertex.y+(y+1)*sliceSize;
 			    		const fz = originVertex.z+(x+1)*sliceSize;
-					    this.verteces.push(this.makeVertexForAFace(originVertex,farestVertex,fx,fy,fz));
+					    this.verteces.push(this.normaliseVertexForAFace(originVertex,farestVertex,fx,fy,fz));
 				}
 			}
   		// Z axis faces
@@ -201,27 +202,27 @@ class Face {
 			    		const ax = originVertex.x+x*sliceSize;
 			    		const ay = originVertex.y;
 			    		const az = originVertex.z+y*sliceSize;
-					    this.verteces.push(this.makeVertexForAFace(originVertex,farestVertex,ax,ay,az));
+					    this.verteces.push(this.normaliseVertexForAFace(originVertex,farestVertex,ax,ay,az));
 			    		const bx = originVertex.x+(x+1)*sliceSize;
 			    		const by = originVertex.y;
 			    		const bz = originVertex.z+(y+1)*sliceSize;
-					    this.verteces.push(this.makeVertexForAFace(originVertex,farestVertex,bx,by,bz));
+					    this.verteces.push(this.normaliseVertexForAFace(originVertex,farestVertex,bx,by,bz));
 			    		const cx = originVertex.x+x*sliceSize;
 			    		const cy = originVertex.y;
 			    		const cz = originVertex.z+(y+1)*sliceSize;
-					    this.verteces.push(this.makeVertexForAFace(originVertex,farestVertex,cx,cy,cz));
+					    this.verteces.push(this.normaliseVertexForAFace(originVertex,farestVertex,cx,cy,cz));
 			    		const dx = originVertex.x+x*sliceSize;
 			    		const dy = originVertex.y;
 			    		const dz = originVertex.z+y*sliceSize;
-					    this.verteces.push(this.makeVertexForAFace(originVertex,farestVertex,dx,dy,dz));
+					    this.verteces.push(this.normaliseVertexForAFace(originVertex,farestVertex,dx,dy,dz));
 			    		const ex = originVertex.x+(x+1)*sliceSize;
 			    		const ey = originVertex.y;
 			    		const ez = originVertex.z+y*sliceSize;
-					    this.verteces.push(this.makeVertexForAFace(originVertex,farestVertex,ex,ey,ez));
+					    this.verteces.push(this.normaliseVertexForAFace(originVertex,farestVertex,ex,ey,ez));
 			    		const fx = originVertex.x+(x+1)*sliceSize;
 			    		const fy = originVertex.y;
 			    		const fz = originVertex.z+(y+1)*sliceSize;
-					    this.verteces.push(this.makeVertexForAFace(originVertex,farestVertex,fx,fy,fz));
+					    this.verteces.push(this.normaliseVertexForAFace(originVertex,farestVertex,fx,fy,fz));
 				}
 			}
   		} else if(face_index == 5) {
@@ -233,34 +234,34 @@ class Face {
 			    		const ax = originVertex.x+x*sliceSize;
 			    		const ay = originVertex.y;
 			    		const az = originVertex.z+y*sliceSize;
-					    this.verteces.push(this.makeVertexForAFace(originVertex,farestVertex,ax,ay,az));
+					    this.verteces.push(this.normaliseVertexForAFace(originVertex,farestVertex,ax,ay,az));
 			    		const bx = originVertex.x+(x+1)*sliceSize;
 			    		const by = originVertex.y;
 			    		const bz = originVertex.z+y*sliceSize;
-					    this.verteces.push(this.makeVertexForAFace(originVertex,farestVertex,bx,by,bz));
+					    this.verteces.push(this.normaliseVertexForAFace(originVertex,farestVertex,bx,by,bz));
 			    		const cx = originVertex.x+x*sliceSize;
 			    		const cy = originVertex.y;
 			    		const cz = originVertex.z+(y+1)*sliceSize;
-					    this.verteces.push(this.makeVertexForAFace(originVertex,farestVertex,cx,cy,cz));
+					    this.verteces.push(this.normaliseVertexForAFace(originVertex,farestVertex,cx,cy,cz));
 			    		const dx = originVertex.x+x*sliceSize;
 			    		const dy = originVertex.y;
 			    		const dz = originVertex.z+(y+1)*sliceSize;
-					    this.verteces.push(this.makeVertexForAFace(originVertex,farestVertex,dx,dy,dz));
+					    this.verteces.push(this.normaliseVertexForAFace(originVertex,farestVertex,dx,dy,dz));
 			    		const ex = originVertex.x+(x+1)*sliceSize;
 			    		const ey = originVertex.y;
 			    		const ez = originVertex.z+y*sliceSize;
-					    this.verteces.push(this.makeVertexForAFace(originVertex,farestVertex,ex,ey,ez));
+					    this.verteces.push(this.normaliseVertexForAFace(originVertex,farestVertex,ex,ey,ez));
 			    		const fx = originVertex.x+(x+1)*sliceSize;
 			    		const fy = originVertex.y;
 			    		const fz = originVertex.z+(y+1)*sliceSize;
-					    this.verteces.push(this.makeVertexForAFace(originVertex,farestVertex,fx,fy,fz));
+					    this.verteces.push(this.normaliseVertexForAFace(originVertex,farestVertex,fx,fy,fz));
 				}
 			}
   		}
 
 	}
 
-	draw(material) {
+	draw(firstMaterial, secondMaterial) {
 
 	    for(let i=0;i<this.verteces.length;i+=3){
 			let geometry = new THREE.Geometry();
@@ -274,11 +275,16 @@ class Face {
 			geometry.faces.push(new THREE.Face3(0, 1, 2));
 			geometry.computeBoundingSphere();
 
-			// let geometry = new THREE.BoxGeometry( 1, 1, 1 );
-			// let material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+			if(!secondMaterial) {
+				let mesh = new THREE.Mesh(geometry, firstMaterial);
+				scene.add(mesh);
+			} else {
+				let group = new THREE.Group();
+				group.add( new THREE.LineSegments( geometry, firstMaterial ) );
+				group.add( new THREE.Mesh( geometry, secondMaterial ) );
+				scene.add(group);
+			}
 
-			let mesh = new THREE.Mesh(geometry, material);
-			scene.add(mesh);
 	    }
 
 
