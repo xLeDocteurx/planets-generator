@@ -13,10 +13,11 @@ let resolution;
 let planete;
 // let sphere = new Sphere(true);
 
-var scene;
-var camera;
+let scene;
+let camera;
+let fov;
 
-var renderer;
+let renderer;
 
 let controls;
 
@@ -35,7 +36,10 @@ setup();
 function preload() {
 
 	size = 300;
-	resolution = 4;
+	resolution = 32;
+
+	fov = 2000;
+
 	planete = new ThreeCube();
   	// bg = loadImage('./assets/002.jpg');
   	// font = loadFont('assets/inconsolata.otf');
@@ -47,7 +51,7 @@ function setup() {
   	setupUI();
 
 	scene = new THREE.Scene();
-	camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+	camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, fov );
 
 	// scene.add( new THREE.AmbientLight( 0x222222 ) );
 	
@@ -59,10 +63,18 @@ function setup() {
 
 	camera.position.z = 500;
 
-	planete.init(size, resolution);
 
-	planete.draw();
+
+	const material = new THREE.MeshBasicMaterial({
+		color: 0xffff00,
+		wireframe: true,
+		side: THREE.DoubleSide,
+	});
+	planete.init(size, resolution);
+	planete.draw(material);
 	
+
+
 	window.addEventListener("resize", () => windowResized());
 
 }

@@ -1,8 +1,9 @@
 class ThreeCube {
 
-	constructor() {
+	constructor(material) {
 		this.faces = null;
 		this.farestVertex = null;
+		this.material = material;
 	}
 
 	init(size, resolution){
@@ -25,9 +26,9 @@ class ThreeCube {
 		this.farestVertex = v1.distanceTo(v2);
 	}
 
-	draw(){
+	draw(material){
 		this.faces.forEach((face, face_i) => {
-			face.draw();
+			face.draw(material);
 		});
 	}
 
@@ -259,11 +260,10 @@ class Face {
 
 	}
 
-	draw() {
-
+	draw(material) {
 
 	    for(let i=0;i<this.verteces.length;i+=3){
-			var geometry = new THREE.Geometry();
+			let geometry = new THREE.Geometry();
 	    	
 			geometry.vertices.push(
 				this.verteces[i],
@@ -271,17 +271,13 @@ class Face {
 				this.verteces[i+2]
 			);
 
-			geometry.faces.push( new THREE.Face3( 0, 1, 2 ) );
+			geometry.faces.push(new THREE.Face3(0, 1, 2));
 			geometry.computeBoundingSphere();
 
-			// var geometry = new THREE.BoxGeometry( 1, 1, 1 );
-			// var material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
-			var material = new THREE.MeshBasicMaterial({
-				color: 0xffff00,
-				wireframe: true,
-			});
+			// let geometry = new THREE.BoxGeometry( 1, 1, 1 );
+			// let material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
 
-			var mesh = new THREE.Mesh( geometry, material );
+			let mesh = new THREE.Mesh(geometry, material);
 			scene.add(mesh);
 	    }
 
