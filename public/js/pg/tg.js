@@ -7,9 +7,9 @@ let fr = 30;
 // let rotateYSlider;
 // let rotateYState = true;
 // let sizeSlider;
-let size;
+// let size;
 // let resolutionSlider;
-let resolution;
+// let resolution;
 let planete;
 // let sphere = new Sphere(true);
 
@@ -20,6 +20,7 @@ let fov;
 let renderer;
 
 let controls;
+let options;
 let gui;
 
 
@@ -27,6 +28,10 @@ let gui;
 preload();
 
 setup();
+
+// DAT.GUI Related Stuff
+
+
 
 // animate();
 
@@ -36,15 +41,26 @@ setup();
 
 function preload() {
 
-	size = 300;
-	resolution = 16;
+	// Options to be added to the GUI
+	options = {
+	  planete: {
+	    size: 300,
+	    resolution: 16,
+	  },
+	  noise_beta: {
+
+	  }
+	  // stop: function() {
+	  //   this.velx = 0;
+	  //   this.vely = 0;
+	  // }
+	};
 
 	fov = 2000;
 
 	planete = new ThreeCube();
   	// bg = loadImage('./assets/002.jpg');
   	// font = loadFont('assets/inconsolata.otf');
-
 }
 
 function setup() {
@@ -61,7 +77,7 @@ function setup() {
 
 	controls = new THREE.OrbitControls(camera, renderer.domElement);
 
-	camera.position.z = size*3;
+	camera.position.z = options.planete.size*3;
 
 	const ambiantLight = new THREE.AmbientLight(0xFFFFFF, 1.0);
 	//Create a DirectionalLight and turn on shadows for the light
@@ -71,9 +87,9 @@ function setup() {
 	let pointLight1 = new THREE.PointLight( 0xffffff, 1, 0 );
 	let pointLight2 = new THREE.PointLight( 0xffffff, 1, 0 );
 	let pointLight3 = new THREE.PointLight( 0xffffff, 1, 0 );
-	pointLight1.position.set(0, size*8, 0);
-	pointLight2.position.set(size*4, size*8, size*4);
-	pointLight3.position.set(-size*4, -size*8, -size*4);
+	pointLight1.position.set(0, options.planete.size*8, 0);
+	pointLight2.position.set(options.planete.size*4, options.planete.size*8, options.planete.size*4);
+	pointLight3.position.set(-options.planete.size*4, -options.planete.size*8, -options.planete.size*4);
 	const pointLight = new THREE.PointLight(0x222222, 1.0);
 	const spotLight = new THREE.SpotLight(0x222222, 1.0);
 	
@@ -108,7 +124,7 @@ function setup() {
 		// side: THREE.DoubleSide,
 	});
 
-	planete.init(size, resolution);
+	planete.init(options.planete.size, options.planete.resolution);
 	planete.draw(lineMaterial, meshMaterial);
 	// planete.draw(material);
 	
@@ -117,17 +133,20 @@ function setup() {
 }
 
 function setupUI() {
+	
+	gui = new dat.GUI();
 
-	// gui = new THREE.GUI();
+	var planetGui = gui.addFolder('Planete');
+	planetGui.add(options.planete, 'size', 1, 500).name('Width').listen();
+	planetGui.add(options.planete, 'resolution', 1, 64).listen();
+	planetGui.open();
 
-	// sizeSlider = createSlider(100, 1000, 300);
-	// sizeSlider.position(10, 40);
-	// size = sizeSlider.value();
-	// size = 300;
-	// resolutionSlider = createSlider(2, 25, 4);
-	// resolutionSlider.position(10, 10);
-	// resolution = resolutionSlider.value();
-	// resolution = 4;
+	var noiseBetaGui = gui.addFolder('Noise Beta');
+	// noiseBetaGui.add(options.camera, 'speed', 0, 0.0010).listen();
+	// noiseBetaGui.add(camera.position, 'y', 0, 100).listen();
+	noiseBetaGui.open();
+
+	// gui.add(options, 'stop');
 
 }
 

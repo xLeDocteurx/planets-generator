@@ -5,7 +5,7 @@ A small Three.js planets 3D generator
 
 Update : Went from P5.js to Three.js. P5 had a really low framerate at high resolutions.
 
-![cubes view](https://github.com/xLeDocteurx/planets-generator/blob/master/git/sc001.png)
+![cubes view](https://github.com/xLeDocteurx/planets-generator/blob/master/git/sc002.png)
 
 ### How it works :
 For now it's a raw prototype.
@@ -22,7 +22,7 @@ render
 ### Things to come :
 - ~~Draw a 3D cube.~~
 - ~~Extrapolate the veteces depending on their distance from the center of the cube.~~
-- Resurect GUI.
+- ~~Resurect GUI.~~
 - Simple perlin noise modulation of the surface.
 - A more complex noise engine with multiple layers and noises type.
 - Coloring the polygons depending on their hight.
