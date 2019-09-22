@@ -12,6 +12,7 @@ let fr = 30;
 // let resolution;
 let planete;
 // let sphere = new Sphere(true);
+let skybox;
 
 let scene;
 let camera;
@@ -52,8 +53,6 @@ setup();
 // clearInterval(refreshIntervalId);
 
 function preload() {
-
-	fov = 2000;
 
   	// bg = loadImage('./assets/002.jpg');
   	// font = loadFont('assets/inconsolata.otf');
@@ -120,11 +119,17 @@ function setup() {
 		// side: THREE.DoubleSide,
 	});
 
+	// skybox = new Skybox();
+	// skybox.init(options.planete.size);
+	// skybox.draw();
+
 	planete = new ThreeCube(lineMaterial, meshMaterial);
 	planete.init(options.planete.size, options.planete.resolution);
 	planete.draw();
 	// planete.draw(material);
-	
+
+	fov = options.planete.size*10;
+
 	window.addEventListener("resize", () => windowResized());
 
 }
