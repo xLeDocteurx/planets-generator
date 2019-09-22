@@ -20,7 +20,19 @@ let fov;
 let renderer;
 
 let controls;
-let options;
+let options = {
+	planete: {
+		size: 300,
+		resolution: 16,
+	},
+	noise_beta: {
+
+	}
+	// stop: function() {
+	//   this.velx = 0;
+	//   this.vely = 0;
+	// }
+};
 let gui;
 
 
@@ -41,24 +53,8 @@ setup();
 
 function preload() {
 
-	// Options to be added to the GUI
-	options = {
-	  planete: {
-	    size: 300,
-	    resolution: 16,
-	  },
-	  noise_beta: {
-
-	  }
-	  // stop: function() {
-	  //   this.velx = 0;
-	  //   this.vely = 0;
-	  // }
-	};
-
 	fov = 2000;
 
-	planete = new ThreeCube();
   	// bg = loadImage('./assets/002.jpg');
   	// font = loadFont('assets/inconsolata.otf');
 }
@@ -124,8 +120,9 @@ function setup() {
 		// side: THREE.DoubleSide,
 	});
 
+	planete = new ThreeCube(lineMaterial, meshMaterial);
 	planete.init(options.planete.size, options.planete.resolution);
-	planete.draw(lineMaterial, meshMaterial);
+	planete.draw();
 	// planete.draw(material);
 	
 	window.addEventListener("resize", () => windowResized());
@@ -133,12 +130,22 @@ function setup() {
 }
 
 function setupUI() {
-	
+
 	gui = new dat.GUI();
 
 	var planetGui = gui.addFolder('Planete');
-	planetGui.add(options.planete, 'size', 1, 500).name('Width').listen();
-	planetGui.add(options.planete, 'resolution', 1, 64).listen();
+	planetGui.add(options.planete, 'size', 1, 500).name('Size').onChange(() => {
+		planete.remove();
+		planete.init(options.planete.size, options.planete.resolution);
+		planete.draw();
+		console.log(planete);
+    });
+	planetGui.add(options.planete, 'resolution', 2, 64).name('Resolution').onChange(() => {
+		planete.remove();
+		planete.init(options.planete.size, options.planete.resolution);
+		planete.draw();
+		console.log(planete);
+	});
 	planetGui.open();
 
 	var noiseBetaGui = gui.addFolder('Noise Beta');

@@ -27,9 +27,15 @@ class ThreeCube {
 		this.farestVertex = v1.distanceTo(v2);
 	}
 
-	draw(firstMaterial, secondMaterial){
+	draw(){
 		this.faces.forEach((face, face_i) => {
-			face.draw(firstMaterial, secondMaterial);
+			face.draw(this.firstMaterial, this.secondMaterial);
+		});
+	}
+
+	remove(){
+		this.faces.forEach((face, face_i) => {
+			face.remove();
 		});
 	}
 
@@ -39,6 +45,7 @@ class Face {
 
 	constructor(){
 		this.verteces = [];
+		this.computed = new THREE.Group();
 	}
 
 	// TO DO ( éviter la répétition dans la fonction init() )
@@ -277,16 +284,17 @@ class Face {
 
 			if(!secondMaterial) {
 				let mesh = new THREE.Mesh(geometry, firstMaterial);
-				scene.add(mesh);
+				this.computed.add(mesh);
 			} else {
 				let group = new THREE.Group();
 				group.add( new THREE.LineSegments( geometry, firstMaterial ) );
 				group.add( new THREE.Mesh( geometry, secondMaterial ) );
-				scene.add(group);
+				this.computed.add(group);
 			}
 
 	    }
 
+		scene.add(this.computed);
 
 	   //  fill(200);
 	  	// stroke(0);
@@ -312,4 +320,7 @@ class Face {
 
 	}
 
+	remove() {
+		scene.remove(this.computed);
+	}
 }
