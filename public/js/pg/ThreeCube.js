@@ -57,7 +57,7 @@ class Face {
 
 		let newVertex;
 		newVertex = this.normaliseVertex(originVertex,farestVertex,x,y,z);
-		newVertex = this.applyNoiseToVertex(newVertex,x,y,z);
+		newVertex = this.applyNoiseToVertex(newVertex);
 
 		return newVertex;
 	}
@@ -314,10 +314,19 @@ class Face {
 				let mesh = new THREE.Mesh(geometry, firstMaterial);
 				this.computed.add(mesh);
 			} else {
-				let group = new THREE.Group();
-				group.add( new THREE.LineSegments( geometry, firstMaterial ) );
-				group.add( new THREE.Mesh( geometry, secondMaterial ) );
-				this.computed.add(group);
+
+				const center = new THREE.Vector3(0,0,0);
+				const coef = (
+					center.distanceTo(this.verteces[i])
+					+ center.distanceTo(this.verteces[i+1])
+					+ center.distanceTo(this.verteces[i+2])
+					)/3;
+
+				if(coef <= this.noiseOptions.waterLevel * 260 ){
+					this.computed.add( new THREE.Mesh( geometry, firstMaterial ) );
+				} else {
+					this.computed.add( new THREE.Mesh( geometry, secondMaterial ) );
+				}
 			}
 
 	    }

@@ -16,13 +16,14 @@ let controls;
 let options = {
 	planete: {
 		size: 300,
-		resolution: 16,
+		resolution: 32,
 	},
 	noise_beta: {
 		seed: "seed",
 		waterLevel: 0.56,
-		octave: 1,
-		stregth: 1,
+		octave: 0.5,
+		scale: 0.12,
+		stregth: 1.0,
 	},
 	// stop: function() {
 	//   this.velx = 0;
@@ -128,8 +129,8 @@ function setup() {
 	// skybox.init(options.planete.size);
 	// skybox.draw();
 
-	planete = new ThreeCube(lineMaterial, waterMaterial);
-	// planete = new ThreeCube(groundMaterial);
+	// planete = new ThreeCube(lineMaterial, waterMaterial);
+	planete = new ThreeCube(waterMaterial, groundMaterial);
 	planete.init(options.planete, options.noise_beta);
 	planete.draw();
 	// const waterGeometry = new THREE.SphereGeometry(options.planete.size/2, options.planete.resolution, options.planete.resolution);
@@ -147,7 +148,7 @@ function setupUI() {
 	gui = new dat.GUI();
 
 	var planetGui = gui.addFolder('Planete');
-	planetGui.add(options.planete, 'size', 1, 500).name('Size').onChange(() => {
+	planetGui.add(options.planete, 'size', 1, 1000).name('Size').onChange(() => {
 		planete.remove();
 		planete.init(options.planete, options.noise_beta);
 		planete.draw();
@@ -166,12 +167,17 @@ function setupUI() {
 		planete.init(options.planete, options.noise_beta);
 		planete.draw();
 	});
-	noiseBetaGui.add(options.noise_beta, 'waterLevel', 0, 1).onChange(() => {
+	noiseBetaGui.add(options.noise_beta, 'waterLevel', 0.2, 1).onChange(() => {
 		planete.remove();
 		planete.init(options.planete, options.noise_beta);
 		planete.draw();
 	});
-	noiseBetaGui.add(options.noise_beta, 'octave', 0, 100).onChange(() => {
+	noiseBetaGui.add(options.noise_beta, 'octave', 0, 1).onChange(() => {
+		planete.remove();
+		planete.init(options.planete, options.noise_beta);
+		planete.draw();
+	});
+	noiseBetaGui.add(options.noise_beta, 'scale', 0, 1).onChange(() => {
 		planete.remove();
 		planete.init(options.planete, options.noise_beta);
 		planete.draw();
