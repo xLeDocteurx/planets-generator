@@ -1,15 +1,6 @@
-// let bg;
-// let font;
-
 // let canva;
 let fr = 30;
 
-// let rotateYSlider;
-// let rotateYState = true;
-// let sizeSlider;
-// let size;
-// let resolutionSlider;
-// let resolution;
 let planete;
 let water;
 // let sphere = new Sphere(true);
@@ -29,7 +20,7 @@ let options = {
 	},
 	noise_beta: {
 		seed: "seed",
-		threeshold: 0.56,
+		waterLevel: 0.56,
 		octave: 1,
 		stregth: 1,
 	},
@@ -175,7 +166,7 @@ function setupUI() {
 		planete.init(options.planete, options.noise_beta);
 		planete.draw();
 	});
-	noiseBetaGui.add(options.noise_beta, 'threeshold', 0, 1).onChange(() => {
+	noiseBetaGui.add(options.noise_beta, 'waterLevel', 0, 1).onChange(() => {
 		planete.remove();
 		planete.init(options.planete, options.noise_beta);
 		planete.draw();

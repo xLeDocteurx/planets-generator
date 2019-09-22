@@ -81,7 +81,7 @@ class Face {
 		const noiseValue = noise(vertex.x, vertex.y, vertex.z);
 		noisedVertex.multiplyScalar(
 			// noiseValue
-			noiseValue < this.noiseOptions.threeshold ? this.noiseOptions.threeshold : noiseValue
+			noiseValue < this.noiseOptions.waterLevel ? this.noiseOptions.waterLevel : noiseValue
 		);
 		// console.log(noise(vertex.x, vertex.y, vertex.z));
 		return noisedVertex;
