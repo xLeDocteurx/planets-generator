@@ -23,7 +23,7 @@ render
 - ~~Draw a 3D cube.~~
 - ~~Extrapolate the veteces depending on their distance from the center of the cube.~~
 - ~~Resurect GUI.~~
-- Simple perlin noise modulation of the surface.
+- ~~Simple perlin noise modulation of the surface.~~
 - A more complex noise engine with multiple layers and noises type.
 - Coloring the polygons depending on their hight.
 - Struggle to developp a terrain erosion algorythm.

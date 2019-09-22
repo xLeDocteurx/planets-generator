@@ -27,12 +27,14 @@ let options = {
 		resolution: 16,
 	},
 	noise_beta: {
-
-	}
+		seed: "blbl",
+		octave: 1,
+		stregth: 1,
+	},
 	// stop: function() {
 	//   this.velx = 0;
 	//   this.vely = 0;
-	// }
+	// },
 };
 let gui;
 
@@ -59,6 +61,8 @@ function preload() {
 }
 
 function setup() {
+
+	noiseSeed(options.noise_beta.seed);
 
   	setupUI();
 
@@ -143,19 +147,31 @@ function setupUI() {
 		planete.remove();
 		planete.init(options.planete.size, options.planete.resolution);
 		planete.draw();
-		console.log(planete);
     });
 	planetGui.add(options.planete, 'resolution', 2, 64).name('Resolution').onChange(() => {
 		planete.remove();
 		planete.init(options.planete.size, options.planete.resolution);
 		planete.draw();
-		console.log(planete);
 	});
 	planetGui.open();
 
 	var noiseBetaGui = gui.addFolder('Noise Beta');
-	// noiseBetaGui.add(options.camera, 'speed', 0, 0.0010).listen();
-	// noiseBetaGui.add(camera.position, 'y', 0, 100).listen();
+	noiseBetaGui.add(options.noise_beta, 'seed').onChange(() => {
+		seedChanged();
+		planete.remove();
+		planete.init(options.planete.size, options.planete.resolution);
+		planete.draw();
+	});
+	noiseBetaGui.add(options.noise_beta, 'octave', 0, 100).onChange(() => {
+		planete.remove();
+		planete.init(options.planete.size, options.planete.resolution);
+		planete.draw();
+	});
+	noiseBetaGui.add(options.noise_beta, 'stregth', 0, 100).onChange(() => {
+		planete.remove();
+		planete.init(options.planete.size, options.planete.resolution);
+		planete.draw();
+	});
 	noiseBetaGui.open();
 
 	// gui.add(options, 'stop');
@@ -202,6 +218,10 @@ function windowResized() {
   	camera.aspect = width/height;
   	camera.updateProjectionMatrix();
 
+}
+
+function seedChanged() {
+	noiseSeed(options.noise_beta.seed);
 }
 
 // function gotFile(file) {
