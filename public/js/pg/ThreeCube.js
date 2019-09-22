@@ -5,14 +5,18 @@ class ThreeCube {
 		this.farestVertex = null;
 		this.firstMaterial = firstMaterial;
 		this.secondMaterial = secondMaterial;
+
+		this.noiseOptions = null;
 	}
 
-	init(size, resolution){
+	init(planeteOptions, noiseOptions){
+
+		let {size, resolution} = planeteOptions;
 
 		let faces = []
 		for (let i=0; i<6; i++) {
 			let face = new Face();
-			face.init(i, size, resolution);
+			face.init(i, size, resolution, noiseOptions);
 			faces.push(face);
 		}
 		this.faces = faces;
@@ -46,6 +50,7 @@ class Face {
 	constructor(){
 		this.verteces = [];
 		this.computed = new THREE.Group();
+		this.noiseOptions = null;
 	}
 
 	computeVertex(originVertex,farestVertex,x,y,z){
@@ -73,15 +78,19 @@ class Face {
 	applyNoiseToVertex(vertex){
 
 		let noisedVertex = new THREE.Vector3(vertex.x,vertex.y,vertex.z);
+		const noiseValue = noise(vertex.x, vertex.y, vertex.z);
 		noisedVertex.multiplyScalar(
-			noise(vertex.x, vertex.y, vertex.z)
+			// noiseValue
+			noiseValue < this.noiseOptions.threeshold ? this.noiseOptions.threeshold : noiseValue
 		);
 		// console.log(noise(vertex.x, vertex.y, vertex.z));
 		return noisedVertex;
 	}
 
 	// TO DO ( éviter la répétition dans la fonction init() )
-	init(face_index, size, resolution){
+	init(face_index, size, resolution, noiseOptions){
+		
+		this.noiseOptions = noiseOptions;
 
 		const v1 = new THREE.Vector3(0,0,0);
 		const v2 = new THREE.Vector3(size/2,size/2,size/2);
