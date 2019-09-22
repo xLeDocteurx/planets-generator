@@ -5,7 +5,7 @@ A small Three.js planets 3D generator
 
 Update : Went from P5.js to Three.js. P5 had a really low framerate at high resolutions.
 
-![cubes view](https://github.com/xLeDocteurx/planets-generator/blob/master/git/sc002.png)
+![cubes view](https://github.com/xLeDocteurx/planets-generator/blob/master/git/sc004.png)
 
 ### How it works :
 For now it's a raw prototype.

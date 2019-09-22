@@ -114,8 +114,8 @@ function setup() {
 		flatShading: true
 	});
 	var waterMaterial = new THREE.MeshPhongMaterial({
-		opacity: 0.85,
-      	transparent: true,
+		// opacity: 0.85,
+      	// transparent: true,
 		color: 0x156289, 
 		emissive: 0x072534, 
 		side: THREE.DoubleSide, 
@@ -137,8 +137,8 @@ function setup() {
 	// skybox.init(options.planete.size);
 	// skybox.draw();
 
-	// planete = new ThreeCube(lineMaterial, groundMaterial);
-	planete = new ThreeCube(groundMaterial);
+	planete = new ThreeCube(lineMaterial, waterMaterial);
+	// planete = new ThreeCube(groundMaterial);
 	planete.init(options.planete, options.noise_beta);
 	planete.draw();
 	// const waterGeometry = new THREE.SphereGeometry(options.planete.size/2, options.planete.resolution, options.planete.resolution);
