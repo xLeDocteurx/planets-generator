@@ -18,8 +18,8 @@ let options = {
 		size: 300,
 		resolution: 24,
 		showWater: true,
-		// waterLevel: 0.56,
-		waterLevel: 1,
+		waterLevel: 0.56,
+		// waterLevel: 1,
 	},
 	noise_beta: {
 		seed: "seed",
@@ -27,8 +27,8 @@ let options = {
 		offset: 300,
 		scale: 0.15,
 		octave: 4,
-		// falloff: 0.5,
-		falloff: 1,
+		falloff: 0.5,
+		// falloff: 1,
 		strength: 1.0,
 	},
 	// stop: function() {
