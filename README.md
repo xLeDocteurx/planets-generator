@@ -1,7 +1,9 @@
 # Planets Generator
 
 ~~A small P5.js planets 3D generator~~
+
 A small Three.js planets 3D generator
+
 https://planets-generator.herokuapp.com
 
 Update : Went from P5.js to Three.js. P5 had a really low framerate at high resolutions.
