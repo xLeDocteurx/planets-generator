@@ -18,14 +18,16 @@ let options = {
 		size: 300,
 		resolution: 24,
 		showWater: true,
-		waterLevel: 0.56,
+		// waterLevel: 0.56,
+		waterLevel: 0.50,
 	},
 	noise_beta: {
 		seed: "seed",
 		// scale: 0.12,
-		scale: 0.01,
 		offset: 300,
-		octave: 0.5,
+		scale: 0.01,
+		octave: 4,
+		falloff: 0.5,
 		strength: 1.0,
 	},
 	// stop: function() {
@@ -60,7 +62,7 @@ function preload() {
 function setup() {
 
 	noiseSeed(options.noise_beta.seed);
-	// noiseDetail(4,0.5);
+	noiseDetail(options.noise_beta.octave,options.noise_beta.falloff);
 
 
   	setupUI();
@@ -192,8 +194,15 @@ function setupUI() {
 		planete.init(options.planete, options.noise_beta);
 		planete.draw();
 	});
-	noiseBetaGui.add(options.noise_beta, 'octave', 0, 1).onChange(() => {
+	noiseBetaGui.add(options.noise_beta, 'octave', 1, 16).onChange(() => {
 		planete.remove();
+		noiseDetailChanged();
+		planete.init(options.planete, options.noise_beta);
+		planete.draw();
+	});
+	noiseBetaGui.add(options.noise_beta, 'falloff', 0, 1).onChange(() => {
+		planete.remove();
+		noiseDetailChanged();
 		planete.init(options.planete, options.noise_beta);
 		planete.draw();
 	});
@@ -246,7 +255,7 @@ function seedChanged() {
 }
 
 function noiseDetailChanged() {
-	noiseDetail(4,0.5);
+	noiseDetail(options.noise_beta.octave,options.noise_beta.falloff);
 }
 
 // function gotFile(file) {
