@@ -134,8 +134,8 @@ function setup() {
 	// skybox.draw();
 
 	// planete = new ThreeCube(lineMaterial, waterMaterial);
-	planete = new ThreeCube(waterMaterial, groundMaterial);
-	planete.init(options.planete, options.noise_beta);
+	planete = new ThreeCube();
+	planete.init(options.planete, options.noise_beta, waterMaterial, groundMaterial);
 	planete.draw();
 	// const waterGeometry = new THREE.SphereGeometry(options.planete.size/2, options.planete.resolution, options.planete.resolution);
 	// water = new THREE.Mesh(waterGeometry, waterMaterial);

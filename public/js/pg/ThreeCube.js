@@ -1,22 +1,25 @@
 class ThreeCube {
 
-	constructor(firstMaterial, secondMaterial) {
+	constructor() {
+		this.computed = new THREE.Group();
 		this.faces = null;
 		this.farestVertex = null;
-		this.firstMaterial = firstMaterial;
-		this.secondMaterial = secondMaterial;
+		this.firstMaterial = null;
+		this.secondMaterial = null;
 
 		this.noiseOptions = null;
 	}
 
-	init(planeteOptions, noiseOptions){
+	init(planeteOptions, noiseOptions, firstMaterial = this.firstMaterial, secondMaterial = this.secondMaterial){
 
 		let {size, resolution} = planeteOptions;
+		this.firstMaterial = firstMaterial;
+		this.secondMaterial = secondMaterial;
 
 		let faces = []
 		for (let i=0; i<6; i++) {
 			let face = new Face();
-			face.init(i, size, resolution, noiseOptions);
+			face.init(i, size, resolution, noiseOptions, firstMaterial, secondMaterial);
 			faces.push(face);
 		}
 		this.faces = faces;
@@ -33,14 +36,16 @@ class ThreeCube {
 
 	draw(){
 		this.faces.forEach((face, face_i) => {
-			face.draw(this.firstMaterial, this.secondMaterial);
+			this.computed.add(this.faces[face_i].computed);
 		});
+		scene.add(this.computed);
 	}
 
 	remove(){
 		this.faces.forEach((face, face_i) => {
 			face.remove();
 		});
+		// scene.remove(this.computed);
 	}
 
 }
@@ -96,8 +101,12 @@ class Face {
 		return noisedVertex;
 	}
 
+	remove() {
+		scene.remove(this.computed);
+	}
+
 	// TO DO ( éviter la répétition dans la fonction init() )
-	init(face_index, size, resolution, noiseOptions){
+	init(face_index, size, resolution, noiseOptions, firstMaterial, secondMaterial){
 		
 		this.noiseOptions = noiseOptions;
 
@@ -105,6 +114,7 @@ class Face {
 		const v2 = new THREE.Vector3(size/2,size/2,size/2);
 		const farestVertex = v1.distanceTo(v2);
 
+		// Verctors part
   		// Faces relative position
   		// X axis faces
   		if(face_index == 0) {
@@ -303,10 +313,7 @@ class Face {
 			}
   		}
 
-	}
-
-	draw(firstMaterial, secondMaterial) {
-
+  		// Materials part
 	    for(let i=0;i<this.verteces.length;i+=3){
 			let geometry = new THREE.Geometry();
 	    	
@@ -332,41 +339,14 @@ class Face {
 					)/3;
 
 				if(coef <= this.noiseOptions.waterLevel * 260 ){
-					this.computed.add( new THREE.Mesh( geometry, firstMaterial ) );
+					this.computed.add(new THREE.Mesh(geometry, firstMaterial));
 				} else {
-					this.computed.add( new THREE.Mesh( geometry, secondMaterial ) );
+					this.computed.add(new THREE.Mesh(geometry, secondMaterial));
 				}
 			}
 
 	    }
 
-		scene.add(this.computed);
-
-	   //  fill(200);
-	  	// stroke(0);
-	  	// noStroke();
-	  	// normalMaterial();
-		// push();
-
-	    // const sliceSize = size/(resolution-1);
-
-	    // for(let i=0;i<this.verteces.length;i+=3){
-	    // 	const vert_A = this.verteces[i];
-	    // 	const vert_B = this.verteces[i+1];
-	    // 	const vert_C = this.verteces[i+2];
-
-		   //  beginShape();
-		   //  vertex(vert_A.x,vert_A.y,vert_A.z);
-		   //  vertex(vert_B.x,vert_B.y,vert_B.z);
-		   //  vertex(vert_C.x,vert_C.y,vert_C.z);
-		   //  endShape(CLOSE);
-	    // }
-
-	    // pop();
-
 	}
 
-	remove() {
-		scene.remove(this.computed);
-	}
 }
