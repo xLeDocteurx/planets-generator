@@ -78,10 +78,19 @@ class Face {
 	applyNoiseToVertex(vertex){
 
 		let noisedVertex = new THREE.Vector3(vertex.x,vertex.y,vertex.z);
-		const noiseValue = noise(vertex.x, vertex.y, vertex.z);
+		const noiseValue = noise(
+			this.noiseOptions.offset + vertex.x * this.noiseOptions.scale, 
+			this.noiseOptions.offset + vertex.y * this.noiseOptions.scale, 
+			this.noiseOptions.offset + vertex.z * this.noiseOptions.scale
+		);
+
 		noisedVertex.multiplyScalar(
 			// noiseValue
-			noiseValue < this.noiseOptions.waterLevel ? this.noiseOptions.waterLevel : noiseValue
+			noiseValue < this.noiseOptions.waterLevel
+				 ? 
+				this.noiseOptions.waterLevel
+				 : 
+				noiseValue * this.noiseOptions.strength
 		);
 		// console.log(noise(vertex.x, vertex.y, vertex.z));
 		return noisedVertex;

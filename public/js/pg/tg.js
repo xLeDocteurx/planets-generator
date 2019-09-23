@@ -16,14 +16,16 @@ let controls;
 let options = {
 	planete: {
 		size: 300,
-		resolution: 32,
+		resolution: 24,
 	},
 	noise_beta: {
 		seed: "seed",
 		waterLevel: 0.56,
+		// scale: 0.12,
+		scale: 0.01,
+		offset: 300,
 		octave: 0.5,
-		scale: 0.12,
-		stregth: 1.0,
+		strength: 1.0,
 	},
 	// stop: function() {
 	//   this.velx = 0;
@@ -57,6 +59,8 @@ function preload() {
 function setup() {
 
 	noiseSeed(options.noise_beta.seed);
+	// noiseDetail(4,0.5);
+
 
   	setupUI();
 
@@ -148,11 +152,11 @@ function setupUI() {
 	gui = new dat.GUI();
 
 	var planetGui = gui.addFolder('Planete');
-	planetGui.add(options.planete, 'size', 1, 1000).name('Size').onChange(() => {
-		planete.remove();
-		planete.init(options.planete, options.noise_beta);
-		planete.draw();
-    });
+	// planetGui.add(options.planete, 'size', 1, 1000).name('Size').onChange(() => {
+	// 	planete.remove();
+	// 	planete.init(options.planete, options.noise_beta);
+	// 	planete.draw();
+ //    });
 	planetGui.add(options.planete, 'resolution', 2, 64).name('Resolution').onChange(() => {
 		planete.remove();
 		planete.init(options.planete, options.noise_beta);
@@ -172,17 +176,22 @@ function setupUI() {
 		planete.init(options.planete, options.noise_beta);
 		planete.draw();
 	});
+	noiseBetaGui.add(options.noise_beta, 'offset', 0, 1000).onChange(() => {
+		planete.remove();
+		planete.init(options.planete, options.noise_beta);
+		planete.draw();
+	});
+	noiseBetaGui.add(options.noise_beta, 'scale', 0.01, 0.5).onChange(() => {
+		planete.remove();
+		planete.init(options.planete, options.noise_beta);
+		planete.draw();
+	});
 	noiseBetaGui.add(options.noise_beta, 'octave', 0, 1).onChange(() => {
 		planete.remove();
 		planete.init(options.planete, options.noise_beta);
 		planete.draw();
 	});
-	noiseBetaGui.add(options.noise_beta, 'scale', 0, 1).onChange(() => {
-		planete.remove();
-		planete.init(options.planete, options.noise_beta);
-		planete.draw();
-	});
-	noiseBetaGui.add(options.noise_beta, 'stregth', 0, 100).onChange(() => {
+	noiseBetaGui.add(options.noise_beta, 'strength', 0, 2).onChange(() => {
 		planete.remove();
 		planete.init(options.planete, options.noise_beta);
 		planete.draw();
@@ -228,6 +237,10 @@ function windowResized() {
 
 function seedChanged() {
 	noiseSeed(options.noise_beta.seed);
+}
+
+function noiseDetailChanged() {
+	noiseDetail(4,0.5);
 }
 
 // function gotFile(file) {
