@@ -17,10 +17,11 @@ let options = {
 	planete: {
 		size: 300,
 		resolution: 24,
+		showWater: true,
+		waterLevel: 0.56,
 	},
 	noise_beta: {
 		seed: "seed",
-		waterLevel: 0.56,
 		// scale: 0.12,
 		scale: 0.01,
 		offset: 300,
@@ -162,16 +163,21 @@ function setupUI() {
 		planete.init(options.planete, options.noise_beta);
 		planete.draw();
 	});
+	planetGui.add(options.planete, 'showWater', false, true).onChange(() => {
+		planete.remove();
+		planete.init(options.planete, options.noise_beta);
+		planete.draw();
+	});
+	planetGui.add(options.planete, 'waterLevel', 0.2, 1).onChange(() => {
+		planete.remove();
+		planete.init(options.planete, options.noise_beta);
+		planete.draw();
+	});
 	planetGui.open();
 
 	var noiseBetaGui = gui.addFolder('Noise Beta');
 	noiseBetaGui.add(options.noise_beta, 'seed').onChange(() => {
 		seedChanged();
-		planete.remove();
-		planete.init(options.planete, options.noise_beta);
-		planete.draw();
-	});
-	noiseBetaGui.add(options.noise_beta, 'waterLevel', 0.2, 1).onChange(() => {
 		planete.remove();
 		planete.init(options.planete, options.noise_beta);
 		planete.draw();

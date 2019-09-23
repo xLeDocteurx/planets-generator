@@ -19,7 +19,7 @@ class ThreeCube {
 		let faces = []
 		for (let i=0; i<6; i++) {
 			let face = new Face();
-			face.init(i, size, resolution, noiseOptions, firstMaterial, secondMaterial);
+			face.init(i, size, resolution, planeteOptions, noiseOptions, firstMaterial, secondMaterial);
 			faces.push(face);
 		}
 		this.faces = faces;
@@ -36,9 +36,10 @@ class ThreeCube {
 
 	draw(){
 		this.faces.forEach((face, face_i) => {
-			this.computed.add(this.faces[face_i].computed);
+			// this.computed.add(this.faces[face_i].computed);
+			face.draw(this.firstMaterial, this.secondMaterial);
 		});
-		scene.add(this.computed);
+		// scene.add(this.computed);
 	}
 
 	remove(){
@@ -55,6 +56,7 @@ class Face {
 	constructor(){
 		this.verteces = [];
 		this.computed = new THREE.Group();
+		this.planeteOptions = null;
 		this.noiseOptions = null;
 	}
 
@@ -80,7 +82,7 @@ class Face {
 		return normalisedVertex;
 	}
 
-	applyNoiseToVertex(vertex){
+	applyNoiseToVertex(vertex, noiseOptions){
 
 		let noisedVertex = new THREE.Vector3(vertex.x,vertex.y,vertex.z);
 		const noiseValue = noise(
@@ -91,23 +93,20 @@ class Face {
 
 		noisedVertex.multiplyScalar(
 			// noiseValue
-			noiseValue < this.noiseOptions.waterLevel
+			noiseValue > this.planeteOptions.waterLevel || !this.planeteOptions.showWater
 				 ? 
-				this.noiseOptions.waterLevel
-				 : 
 				noiseValue * this.noiseOptions.strength
+				 :
+				this.planeteOptions.waterLevel
 		);
 		// console.log(noise(vertex.x, vertex.y, vertex.z));
 		return noisedVertex;
 	}
 
-	remove() {
-		scene.remove(this.computed);
-	}
-
 	// TO DO ( éviter la répétition dans la fonction init() )
-	init(face_index, size, resolution, noiseOptions, firstMaterial, secondMaterial){
+	init(face_index, size, resolution, planeteOptions, noiseOptions, firstMaterial, secondMaterial){
 		
+		this.planeteOptions = planeteOptions;
 		this.noiseOptions = noiseOptions;
 
 		const v1 = new THREE.Vector3(0,0,0);
@@ -313,6 +312,43 @@ class Face {
 			}
   		}
 
+  	// 	// Materials part
+	  //   for(let i=0;i<this.verteces.length;i+=3){
+			// let geometry = new THREE.Geometry();
+	    	
+			// geometry.vertices.push(
+			// 	this.verteces[i],
+			// 	this.verteces[i+1],
+			// 	this.verteces[i+2]
+			// );
+
+			// geometry.faces.push(new THREE.Face3(0, 1, 2));
+			// geometry.computeBoundingSphere();
+
+			// if(!secondMaterial) {
+			// 	let mesh = new THREE.Mesh(geometry, firstMaterial);
+			// 	this.computed.add(mesh);
+			// } else {
+
+			// 	const center = new THREE.Vector3(0,0,0);
+			// 	const coef = (
+			// 		center.distanceTo(this.verteces[i])
+			// 		+ center.distanceTo(this.verteces[i+1])
+			// 		+ center.distanceTo(this.verteces[i+2])
+			// 		)/3;
+
+			// 	if(coef <= this.planeteOptions.waterLevel * 260 ){
+			// 		this.computed.add(new THREE.Mesh(geometry, firstMaterial));
+			// 	} else {
+			// 		this.computed.add(new THREE.Mesh(geometry, secondMaterial));
+			// 	}
+			// }
+
+	  //   }
+
+	}
+
+    draw(firstMaterial, secondMaterial) {
   		// Materials part
 	    for(let i=0;i<this.verteces.length;i+=3){
 			let geometry = new THREE.Geometry();
@@ -338,15 +374,20 @@ class Face {
 					+ center.distanceTo(this.verteces[i+2])
 					)/3;
 
-				if(coef <= this.noiseOptions.waterLevel * 260 ){
-					this.computed.add(new THREE.Mesh(geometry, firstMaterial));
-				} else {
+				if(coef >= this.planeteOptions.waterLevel * 260  || !this.planeteOptions.showWater){
 					this.computed.add(new THREE.Mesh(geometry, secondMaterial));
+				} else {
+					this.computed.add(new THREE.Mesh(geometry, firstMaterial));
 				}
 			}
 
 	    }
 
+	    scene.add(this.computed);
+    }
+
+	remove() {
+		scene.remove(this.computed);
 	}
 
 }
