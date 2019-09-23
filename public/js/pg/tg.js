@@ -25,7 +25,7 @@ let options = {
 		seed: "seed",
 		// scale: 0.12,
 		offset: 300,
-		scale: 0.01,
+		scale: 0.15,
 		octave: 4,
 		falloff: 0.5,
 		strength: 1.0,
@@ -179,8 +179,8 @@ function setupUI() {
 
 	var noiseBetaGui = gui.addFolder('Noise Beta');
 	noiseBetaGui.add(options.noise_beta, 'seed').onChange(() => {
-		seedChanged();
 		planete.remove();
+		seedChanged();
 		planete.init(options.planete, options.noise_beta);
 		planete.draw();
 	});

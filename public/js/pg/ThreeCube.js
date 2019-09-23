@@ -4,6 +4,7 @@ class ThreeCube {
 		this.computed = new THREE.Group();
 		this.faces = null;
 		this.farestVertex = null;
+		this.sliceSize = null;
 		this.firstMaterial = null;
 		this.secondMaterial = null;
 
@@ -13,6 +14,16 @@ class ThreeCube {
 	init(planeteOptions, noiseOptions, firstMaterial = this.firstMaterial, secondMaterial = this.secondMaterial){
 
 		let {size, resolution} = planeteOptions;
+		// console.log(
+		// 	"Distance from center to farest cube edge : ", 
+		// 	Math.sqrt(Math.pow(Math.sqrt(Math.pow(size,2)+Math.pow(size,2))/2,2)+Math.pow(size/2,2))
+		// );
+		let v1 = new THREE.Vector3(0,0,0);
+		let v2 = new THREE.Vector3(size/2,size/2,size/2);
+
+		this.farestVertex = v1.distanceTo(v2);
+		this.sliceSize = size/resolution;
+
 		this.firstMaterial = firstMaterial;
 		this.secondMaterial = secondMaterial;
 
@@ -23,15 +34,7 @@ class ThreeCube {
 			faces.push(face);
 		}
 		this.faces = faces;
-		
-		// console.log(
-		// 	"Distance from center to farest cube edge : ", 
-		// 	Math.sqrt(Math.pow(Math.sqrt(Math.pow(size,2)+Math.pow(size,2))/2,2)+Math.pow(size/2,2))
-		// );
-		let v1 = new THREE.Vector3(0,0,0);
-		let v2 = new THREE.Vector3(size/2,size/2,size/2);
 
-		this.farestVertex = v1.distanceTo(v2);
 	}
 
 	draw(){
@@ -60,16 +63,16 @@ class Face {
 		this.noiseOptions = null;
 	}
 
-	computeVertex(originVertex,farestVertex,x,y,z){
+	computeVertex(sliceSize, farestVertex,x,y,z){
 
 		let newVertex;
-		newVertex = this.normaliseVertex(originVertex,farestVertex,x,y,z);
-		newVertex = this.applyNoiseToVertex(newVertex);
+		newVertex = this.normaliseVertex(farestVertex,x,y,z);
+		newVertex = this.applyNoiseToVertex(newVertex, sliceSize);
 
 		return newVertex;
 	}
 
-	normaliseVertex(originVertex,farestVertex,x,y,z){
+	normaliseVertex(farestVertex,x,y,z){
 
 		const h1 = new THREE.Vector3(0,0,0);
 		const h2 = new THREE.Vector3(x,y,z);
@@ -82,13 +85,13 @@ class Face {
 		return normalisedVertex;
 	}
 
-	applyNoiseToVertex(vertex, noiseOptions){
+	applyNoiseToVertex(vertex, sliceSize){
 
 		let noisedVertex = new THREE.Vector3(vertex.x,vertex.y,vertex.z);
 		const noiseValue = noise(
-			this.noiseOptions.offset + vertex.x * this.noiseOptions.scale, 
-			this.noiseOptions.offset + vertex.y * this.noiseOptions.scale, 
-			this.noiseOptions.offset + vertex.z * this.noiseOptions.scale
+			this.noiseOptions.offset + vertex.x / sliceSize * this.noiseOptions.scale, 
+			this.noiseOptions.offset + vertex.y / sliceSize * this.noiseOptions.scale, 
+			this.noiseOptions.offset + vertex.z / sliceSize * this.noiseOptions.scale
 		);
 
 		noisedVertex.multiplyScalar(
@@ -112,202 +115,196 @@ class Face {
 		const v1 = new THREE.Vector3(0,0,0);
 		const v2 = new THREE.Vector3(size/2,size/2,size/2);
 		const farestVertex = v1.distanceTo(v2);
-
+		const sliceSize = size/(resolution-1);
 		// Verctors part
   		// Faces relative position
   		// X axis faces
   		if(face_index == 0) {
 	    	const originVertex = new THREE.Vector3(-size/2,-size/2,size/2);
-		    const sliceSize = size/(resolution-1);
 		    for(let x=0; x<(resolution-1); x++) {
 			    for(let y=0; y<(resolution-1); y++) {
 
 			    		const ax = originVertex.x+x*sliceSize;
 			    		const ay = originVertex.y+y*sliceSize;
 			    		const az = originVertex.z;
-					    this.verteces.push(this.computeVertex(originVertex,farestVertex,ax,ay,az));
+					    this.verteces.push(this.computeVertex(sliceSize, farestVertex,ax,ay,az));
 			    		const bx = originVertex.x+(x+1)*sliceSize;
 			    		const by = originVertex.y+(y+1)*sliceSize;
 			    		const bz = originVertex.z;
-					    this.verteces.push(this.computeVertex(originVertex,farestVertex,bx,by,bz));
+					    this.verteces.push(this.computeVertex(sliceSize, farestVertex,bx,by,bz));
 			    		const cx = originVertex.x+x*sliceSize;
 			    		const cy = originVertex.y+(y+1)*sliceSize;
 			    		const cz = originVertex.z;
-					    this.verteces.push(this.computeVertex(originVertex,farestVertex,cx,cy,cz));
+					    this.verteces.push(this.computeVertex(sliceSize, farestVertex,cx,cy,cz));
 			    		const dx = originVertex.x+x*sliceSize;
 			    		const dy = originVertex.y+y*sliceSize;
 			    		const dz = originVertex.z;
-					    this.verteces.push(this.computeVertex(originVertex,farestVertex,dx,dy,dz));
+					    this.verteces.push(this.computeVertex(sliceSize, farestVertex,dx,dy,dz));
 			    		const ex = originVertex.x+(x+1)*sliceSize;
 			    		const ey = originVertex.y+y*sliceSize;
 			    		const ez = originVertex.z;
-					    this.verteces.push(this.computeVertex(originVertex,farestVertex,ex,ey,ez));
+					    this.verteces.push(this.computeVertex(sliceSize, farestVertex,ex,ey,ez));
 			    		const fx = originVertex.x+(x+1)*sliceSize;
 			    		const fy = originVertex.y+(y+1)*sliceSize;
 			    		const fz = originVertex.z;
-					    this.verteces.push(this.computeVertex(originVertex,farestVertex,fx,fy,fz));
+					    this.verteces.push(this.computeVertex(sliceSize, farestVertex,fx,fy,fz));
 				}
 			}
   		} else if(face_index == 1) {
 	    	const originVertex = new THREE.Vector3(-size/2,-size/2,-size/2);
-		    const sliceSize = size/(resolution-1);
 		    for(let x=0; x<(resolution-1); x++) {
 			    for(let y=0; y<(resolution-1); y++) {
 
 			    		const ax = originVertex.x+x*sliceSize;
 			    		const ay = originVertex.y+y*sliceSize;
 			    		const az = originVertex.z;
-					    this.verteces.push(this.computeVertex(originVertex,farestVertex,ax,ay,az));
+					    this.verteces.push(this.computeVertex(sliceSize, farestVertex,ax,ay,az));
 			    		const bx = originVertex.x+(x+1)*sliceSize;
 			    		const by = originVertex.y+y*sliceSize;
 			    		const bz = originVertex.z;
-					    this.verteces.push(this.computeVertex(originVertex,farestVertex,bx,by,bz));
+					    this.verteces.push(this.computeVertex(sliceSize, farestVertex,bx,by,bz));
 			    		const cx = originVertex.x+x*sliceSize;
 			    		const cy = originVertex.y+(y+1)*sliceSize;
 			    		const cz = originVertex.z;
-					    this.verteces.push(this.computeVertex(originVertex,farestVertex,cx,cy,cz));
+					    this.verteces.push(this.computeVertex(sliceSize, farestVertex,cx,cy,cz));
 			    		const dx = originVertex.x+x*sliceSize;
 			    		const dy = originVertex.y+(y+1)*sliceSize;
 			    		const dz = originVertex.z;
-					    this.verteces.push(this.computeVertex(originVertex,farestVertex,dx,dy,dz));
+					    this.verteces.push(this.computeVertex(sliceSize, farestVertex,dx,dy,dz));
 			    		const ex = originVertex.x+(x+1)*sliceSize;
 			    		const ey = originVertex.y+y*sliceSize;
 			    		const ez = originVertex.z;
-					    this.verteces.push(this.computeVertex(originVertex,farestVertex,ex,ey,ez));
+					    this.verteces.push(this.computeVertex(sliceSize, farestVertex,ex,ey,ez));
 			    		const fx = originVertex.x+(x+1)*sliceSize;
 			    		const fy = originVertex.y+(y+1)*sliceSize;
 			    		const fz = originVertex.z;
-					    this.verteces.push(this.computeVertex(originVertex,farestVertex,fx,fy,fz));
+					    this.verteces.push(this.computeVertex(sliceSize, farestVertex,fx,fy,fz));
 				}
 			}
 		// Y axis faces
   		} else if(face_index == 2) {
 	    	const originVertex = new THREE.Vector3(size/2,-size/2,-size/2);
-		    const sliceSize = size/(resolution-1);
 		    for(let x=0; x<(resolution-1); x++) {
 			    for(let y=0; y<(resolution-1); y++) {
 
 			    		const ax = originVertex.x;
 			    		const ay = originVertex.y+y*sliceSize;
 			    		const az = originVertex.z+(x+1)*sliceSize;
-					    this.verteces.push(this.computeVertex(originVertex,farestVertex,ax,ay,az));
+					    this.verteces.push(this.computeVertex(sliceSize, farestVertex,ax,ay,az));
 			    		const bx = originVertex.x;
 			    		const by = originVertex.y+(y+1)*sliceSize;
 			    		const bz = originVertex.z+(x+1)*sliceSize;
-					    this.verteces.push(this.computeVertex(originVertex,farestVertex,bx,by,bz));
+					    this.verteces.push(this.computeVertex(sliceSize, farestVertex,bx,by,bz));
 			    		const cx = originVertex.x;
 			    		const cy = originVertex.y+(y+1)*sliceSize;
 			    		const cz = originVertex.z+x*sliceSize;
-					    this.verteces.push(this.computeVertex(originVertex,farestVertex,cx,cy,cz));
+					    this.verteces.push(this.computeVertex(sliceSize, farestVertex,cx,cy,cz));
 			    		const dx = originVertex.x;
 			    		const dy = originVertex.y+y*sliceSize;
 			    		const dz = originVertex.z+x*sliceSize;
-					    this.verteces.push(this.computeVertex(originVertex,farestVertex,dx,dy,dz));
+					    this.verteces.push(this.computeVertex(sliceSize, farestVertex,dx,dy,dz));
 			    		const ex = originVertex.x;
 			    		const ey = originVertex.y+y*sliceSize;
 			    		const ez = originVertex.z+(x+1)*sliceSize;
-					    this.verteces.push(this.computeVertex(originVertex,farestVertex,ex,ey,ez));
+					    this.verteces.push(this.computeVertex(sliceSize, farestVertex,ex,ey,ez));
 			    		const fx = originVertex.x;
 			    		const fy = originVertex.y+(y+1)*sliceSize;
 			    		const fz = originVertex.z+x*sliceSize;
-					    this.verteces.push(this.computeVertex(originVertex,farestVertex,fx,fy,fz));
+					    this.verteces.push(this.computeVertex(sliceSize, farestVertex,fx,fy,fz));
 				}
 			}
   		} else if(face_index == 3) {
 	    	const originVertex = new THREE.Vector3(-size/2,-size/2,-size/2);
-		    const sliceSize = size/(resolution-1);
 		    for(let x=0; x<(resolution-1); x++) {
 			    for(let y=0; y<(resolution-1); y++) {
 
 			    		const ax = originVertex.x;
 			    		const ay = originVertex.y+y*sliceSize;
 			    		const az = originVertex.z+x*sliceSize;
-					    this.verteces.push(this.computeVertex(originVertex,farestVertex,ax,ay,az));
+					    this.verteces.push(this.computeVertex(sliceSize, farestVertex,ax,ay,az));
 			    		const bx = originVertex.x;
 			    		const by = originVertex.y+(y+1)*sliceSize;
 			    		const bz = originVertex.z+(x+1)*sliceSize;
-					    this.verteces.push(this.computeVertex(originVertex,farestVertex,bx,by,bz));
+					    this.verteces.push(this.computeVertex(sliceSize, farestVertex,bx,by,bz));
 			    		const cx = originVertex.x;
 			    		const cy = originVertex.y+(y+1)*sliceSize;
 			    		const cz = originVertex.z+x*sliceSize;
-					    this.verteces.push(this.computeVertex(originVertex,farestVertex,cx,cy,cz));
+					    this.verteces.push(this.computeVertex(sliceSize, farestVertex,cx,cy,cz));
 			    		const dx = originVertex.x;
 			    		const dy = originVertex.y+y*sliceSize;
 			    		const dz = originVertex.z+x*sliceSize;
-					    this.verteces.push(this.computeVertex(originVertex,farestVertex,dx,dy,dz));
+					    this.verteces.push(this.computeVertex(sliceSize, farestVertex,dx,dy,dz));
 			    		const ex = originVertex.x;
 			    		const ey = originVertex.y+y*sliceSize;
 			    		const ez = originVertex.z+(x+1)*sliceSize;
-					    this.verteces.push(this.computeVertex(originVertex,farestVertex,ex,ey,ez));
+					    this.verteces.push(this.computeVertex(sliceSize, farestVertex,ex,ey,ez));
 			    		const fx = originVertex.x;
 			    		const fy = originVertex.y+(y+1)*sliceSize;
 			    		const fz = originVertex.z+(x+1)*sliceSize;
-					    this.verteces.push(this.computeVertex(originVertex,farestVertex,fx,fy,fz));
+					    this.verteces.push(this.computeVertex(sliceSize, farestVertex,fx,fy,fz));
 				}
 			}
   		// Z axis faces
   		} else if(face_index == 4) {
 	    	const originVertex = new THREE.Vector3(-size/2,-size/2,-size/2);
-		    const sliceSize = size/(resolution-1);
 		    for(let x=0; x<(resolution-1); x++) {
 			    for(let y=0; y<(resolution-1); y++) {
 
 			    		const ax = originVertex.x+x*sliceSize;
 			    		const ay = originVertex.y;
 			    		const az = originVertex.z+y*sliceSize;
-					    this.verteces.push(this.computeVertex(originVertex,farestVertex,ax,ay,az));
+					    this.verteces.push(this.computeVertex(sliceSize, farestVertex,ax,ay,az));
 			    		const bx = originVertex.x+(x+1)*sliceSize;
 			    		const by = originVertex.y;
 			    		const bz = originVertex.z+(y+1)*sliceSize;
-					    this.verteces.push(this.computeVertex(originVertex,farestVertex,bx,by,bz));
+					    this.verteces.push(this.computeVertex(sliceSize, farestVertex,bx,by,bz));
 			    		const cx = originVertex.x+x*sliceSize;
 			    		const cy = originVertex.y;
 			    		const cz = originVertex.z+(y+1)*sliceSize;
-					    this.verteces.push(this.computeVertex(originVertex,farestVertex,cx,cy,cz));
+					    this.verteces.push(this.computeVertex(sliceSize, farestVertex,cx,cy,cz));
 			    		const dx = originVertex.x+x*sliceSize;
 			    		const dy = originVertex.y;
 			    		const dz = originVertex.z+y*sliceSize;
-					    this.verteces.push(this.computeVertex(originVertex,farestVertex,dx,dy,dz));
+					    this.verteces.push(this.computeVertex(sliceSize, farestVertex,dx,dy,dz));
 			    		const ex = originVertex.x+(x+1)*sliceSize;
 			    		const ey = originVertex.y;
 			    		const ez = originVertex.z+y*sliceSize;
-					    this.verteces.push(this.computeVertex(originVertex,farestVertex,ex,ey,ez));
+					    this.verteces.push(this.computeVertex(sliceSize, farestVertex,ex,ey,ez));
 			    		const fx = originVertex.x+(x+1)*sliceSize;
 			    		const fy = originVertex.y;
 			    		const fz = originVertex.z+(y+1)*sliceSize;
-					    this.verteces.push(this.computeVertex(originVertex,farestVertex,fx,fy,fz));
+					    this.verteces.push(this.computeVertex(sliceSize, farestVertex,fx,fy,fz));
 				}
 			}
   		} else if(face_index == 5) {
 	    	const originVertex = new THREE.Vector3(-size/2,size/2,-size/2);
-		    const sliceSize = size/(resolution-1);
 		    for(let x=0; x<(resolution-1); x++) {
 			    for(let y=0; y<(resolution-1); y++) {
 
 			    		const ax = originVertex.x+x*sliceSize;
 			    		const ay = originVertex.y;
 			    		const az = originVertex.z+y*sliceSize;
-					    this.verteces.push(this.computeVertex(originVertex,farestVertex,ax,ay,az));
+					    this.verteces.push(this.computeVertex(sliceSize, farestVertex,ax,ay,az));
 			    		const bx = originVertex.x+(x+1)*sliceSize;
 			    		const by = originVertex.y;
 			    		const bz = originVertex.z+y*sliceSize;
-					    this.verteces.push(this.computeVertex(originVertex,farestVertex,bx,by,bz));
+					    this.verteces.push(this.computeVertex(sliceSize, farestVertex,bx,by,bz));
 			    		const cx = originVertex.x+x*sliceSize;
 			    		const cy = originVertex.y;
 			    		const cz = originVertex.z+(y+1)*sliceSize;
-					    this.verteces.push(this.computeVertex(originVertex,farestVertex,cx,cy,cz));
+					    this.verteces.push(this.computeVertex(sliceSize, farestVertex,cx,cy,cz));
 			    		const dx = originVertex.x+x*sliceSize;
 			    		const dy = originVertex.y;
 			    		const dz = originVertex.z+(y+1)*sliceSize;
-					    this.verteces.push(this.computeVertex(originVertex,farestVertex,dx,dy,dz));
+					    this.verteces.push(this.computeVertex(sliceSize, farestVertex,dx,dy,dz));
 			    		const ex = originVertex.x+(x+1)*sliceSize;
 			    		const ey = originVertex.y;
 			    		const ez = originVertex.z+y*sliceSize;
-					    this.verteces.push(this.computeVertex(originVertex,farestVertex,ex,ey,ez));
+					    this.verteces.push(this.computeVertex(sliceSize, farestVertex,ex,ey,ez));
 			    		const fx = originVertex.x+(x+1)*sliceSize;
 			    		const fy = originVertex.y;
 			    		const fz = originVertex.z+(y+1)*sliceSize;
-					    this.verteces.push(this.computeVertex(originVertex,farestVertex,fx,fy,fz));
+					    this.verteces.push(this.computeVertex(sliceSize, farestVertex,fx,fy,fz));
 				}
 			}
   		}
