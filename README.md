@@ -8,7 +8,7 @@ https://planets-generator.herokuapp.com
 
 Update : Went from P5.js to Three.js. P5 had a really low framerate at high resolutions.
 
-![cubes view](https://github.com/xLeDocteurx/planets-generator/blob/master/git/sc005.png)
+![cubes view](https://github.com/xLeDocteurx/planets-generator/blob/master/git/sc006.png)
 
 ### How it works :
 For now it's a raw prototype.
