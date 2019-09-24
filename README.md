@@ -19,8 +19,11 @@ But you can run it with a simple "node server.js" from the root directory
 - ~~Extrapolate the veteces depending on their distance from the center of the cube.~~
 - ~~Resurect GUI.~~
 - ~~Simple perlin noise modulation of the surface.~~
-- A more complex noise engine with multiple layers and noises type.
-- Coloring the polygons depending on their hight.
+- ~~A more complex noise engine with multiple layers and noises type.~~
+- ~~Coloring the polygons depending on their hight.~~
+- More colors for differents terrain types.
+- Only render the frontside of each polygon.
+- Each noise layer can be setup eparatly as well as the falloff between each layer.
 - Struggle to developp a terrain erosion algorythm.
 - Bouyakasha.
 
