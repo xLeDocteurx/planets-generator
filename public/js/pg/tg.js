@@ -10,10 +10,21 @@ let scene;
 let camera;
 let fov;
 
+let ambientLight;
+let directionnalLight;
+let pointLight1;
+let pointLight2;
+let pointLight3;
+
 let renderer;
 
 let controls;
 let options = {
+	space: {
+		ambientLight: 0.0,
+		directionnalLight: 0.3,
+		pointLights: 1.0,
+	},
 	planete: {
 		size: 1,
 		resolution: 24,
@@ -83,21 +94,21 @@ function setup() {
 
 	camera.position.z = options.planete.size*3;
 
-	const ambiantLight = new THREE.AmbientLight(0xFFFFFF, 1.0);
-	//Create a DirectionalLight and turn on shadows for the light
-	var directionnalLight = new THREE.DirectionalLight( 0xffffff, 1, 100 );
-	directionnalLight.position.set( 0, 1, 0 ); 			//default; directionnalLight shining from top
-	directionnalLight.castShadow = true;            // default false
-	let pointLight1 = new THREE.PointLight( 0xffffff, 1, 0 );
-	let pointLight2 = new THREE.PointLight( 0xffffff, 1, 0 );
-	let pointLight3 = new THREE.PointLight( 0xffffff, 1, 0 );
-	pointLight1.position.set(0, options.planete.size*8, 0);
-	pointLight2.position.set(options.planete.size*4, options.planete.size*8, options.planete.size*4);
-	pointLight3.position.set(-options.planete.size*4, -options.planete.size*8, -options.planete.size*4);
-	const pointLight = new THREE.PointLight(0x222222, 1.0);
-	const spotLight = new THREE.SpotLight(0x222222, 1.0);
+	// ambientLight = new THREE.AmbientLight(0xFFFFFF, options.space.ambientLight);
+	// ambientLight.castShadow = true;            // default false
+	// directionnalLight = new THREE.DirectionalLight( 0xffffff, options.space.directionnalLight, 100 );
+	// directionnalLight.position.set( 1, 1, 1 ); 			//default; directionnalLight shining from top
+	// directionnalLight.castShadow = true;            // default false
+	pointLight1 = new THREE.PointLight( 0xffffff, options.space.pointLights, 0 );
+	pointLight2 = new THREE.PointLight( 0xffffff, options.space.pointLights, 0 );
+	pointLight3 = new THREE.PointLight( 0xffffff, options.space.pointLights, 0 );
+	pointLight1.position.set(0, options.planete.size*4, 0);
+	pointLight2.position.set(options.planete.size*2, options.planete.size*4, options.planete.size*2);
+	pointLight3.position.set(-options.planete.size*2, -options.planete.size*4, -options.planete.size*2);
+	// let pointLight = new THREE.PointLight(0x222222, 1.0);
+	// let spotLight = new THREE.SpotLight(0x222222, 1.0);
 	
-	// scene.add(ambiantLight);
+	// scene.add(ambientLight);
 	// scene.add(directionnalLight);
 	scene.add(pointLight1);
 	scene.add(pointLight2);
@@ -105,18 +116,18 @@ function setup() {
 
 	// Normal, Constant, Lambert, Phong, Blinn. materials type
 	// const material = new THREE.MeshLambertMaterial({			
-	var lineMaterial = new THREE.LineBasicMaterial({
+	const lineMaterial = new THREE.LineBasicMaterial({
 		color: 0xffffff, 
 		transparent: true, 
 		opacity: 0.5
 	});
-	var groundMaterial = new THREE.MeshPhongMaterial({
+	const groundMaterial = new THREE.MeshPhongMaterial({
 		color: 0x8C3B0C, 
 		// emissive: 0x8C3B0C, 
 		side: THREE.DoubleSide, 
 		flatShading: true
 	});
-	var waterMaterial = new THREE.MeshPhongMaterial({
+	const waterMaterial = new THREE.MeshPhongMaterial({
 		// opacity: 0.85,
       	// transparent: true,
 		color: 0x156289, 
@@ -156,7 +167,21 @@ function setupUI() {
 
 	gui = new dat.GUI();
 
-	var planetGui = gui.addFolder('Planete');
+	const spaceGui = gui.addFolder('Space');
+	// spaceGui.add(options.space, 'ambientLight', 0, 2).name('ambientLight').onChange(() => {
+	// 	ambientLight.intensity = options.space.ambientLight;
+	// });
+	// spaceGui.add(options.space, 'directionnalLight', 0, 2).name('directionnalLight').onChange(() => {
+	// 	directionnalLight.intensity = options.space.directionnalLight;
+	// });
+	spaceGui.add(options.space, 'pointLights', 0, 2).name('pointLights').onChange(() => {
+		pointLight1.intensity = options.space.pointLights;
+		pointLight2.intensity = options.space.pointLights;
+		pointLight3.intensity = options.space.pointLights;
+	});
+	spaceGui.open();
+
+	const planetGui = gui.addFolder('Planete');
 	// planetGui.add(options.planete, 'size', 1, 1000).name('Size').onChange(() => {
 	// 	planete.remove();
 	// 	planete.init(options.planete, options.noise_beta);
@@ -184,7 +209,7 @@ function setupUI() {
 	});
 	planetGui.open();
 
-	var noiseBetaGui = gui.addFolder('Noise Beta');
+	const noiseBetaGui = gui.addFolder('Noise Beta');
 	noiseBetaGui.add(options.noise_beta, 'seed').onChange(() => {
 		planete.remove();
 		seedChanged();
