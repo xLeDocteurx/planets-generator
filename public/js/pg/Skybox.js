@@ -6,7 +6,7 @@ class Skybox {
 
 	init(planeteSize) {
 
-		const skyboxGeometry = new THREE.CubeGeometry(planeteSize*5, planeteSize*5, planeteSize*5);
+		const skyboxGeometry = new THREE.CubeGeometry(planeteSize*100, planeteSize*100, planeteSize*100);
 		const skyboxAssetsMaterial = [
 			new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load("assets/milkyway/NegativeZ.png"), side: THREE.DoubleSide}),
 			new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load("assets/milkyway/PositiveZ.png"), side: THREE.DoubleSide}),

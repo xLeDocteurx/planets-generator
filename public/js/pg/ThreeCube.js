@@ -59,49 +59,54 @@ class Face {
 	constructor(){
 		this.verteces = [];
 		this.computed = new THREE.Group();
+		this.sliceSize = null;
+		this.farestVertex = null;
 		this.planeteOptions = null;
 		this.noiseOptions = null;
 	}
 
-	computeVertex(sliceSize, farestVertex,x,y,z){
+	computeVertex(x,y,z){
 
 		let newVertex;
-		newVertex = this.normaliseVertex(farestVertex,x,y,z);
-		newVertex = this.applyNoiseToVertex(newVertex, sliceSize);
+		newVertex = this.normaliseVertex(x,y,z);
+		newVertex = this.applyNoiseToVertex(newVertex);
 
 		return newVertex;
 	}
 
-	normaliseVertex(farestVertex,x,y,z){
+	normaliseVertex(x,y,z){
 
 		const h1 = new THREE.Vector3(0,0,0);
 		const h2 = new THREE.Vector3(x,y,z);
 		const hypo = h1.distanceTo(h2);
 
-		let scalar = farestVertex/hypo;
+		let scalar = this.farestVertex/hypo;
 		let normalisedVertex = new THREE.Vector3(x,y,z);
 		normalisedVertex.multiplyScalar(scalar);
 
 		return normalisedVertex;
 	}
 
-	applyNoiseToVertex(vertex, sliceSize){
+	applyNoiseToVertex(vertex){
 
 		let noisedVertex = new THREE.Vector3(vertex.x,vertex.y,vertex.z);
 		const noiseValue = noise(
-			this.noiseOptions.offset + vertex.x / sliceSize * this.noiseOptions.scale, 
-			this.noiseOptions.offset + vertex.y / sliceSize * this.noiseOptions.scale, 
-			this.noiseOptions.offset + vertex.z / sliceSize * this.noiseOptions.scale
+			this.noiseOptions.offset + vertex.x / this.sliceSize * this.noiseOptions.scale, 
+			this.noiseOptions.offset + vertex.y / this.sliceSize * this.noiseOptions.scale, 
+			this.noiseOptions.offset + vertex.z / this.sliceSize * this.noiseOptions.scale
 		);
 
-		noisedVertex.multiplyScalar(
-			// noiseValue
-			noiseValue > this.planeteOptions.waterLevel || !this.planeteOptions.showWater
-				 ? 
-				noiseValue * this.noiseOptions.strength
-				 :
-				this.planeteOptions.waterLevel
-		);
+		let result;
+		if(/*0.5+*/noiseValue > this.planeteOptions.waterLevel || !this.planeteOptions.showWater){
+			if(/*0.5+*/noiseValue > this.planeteOptions.abyssesLevel){
+				result = /*0.5+*/noiseValue * this.noiseOptions.strength;
+			} else {
+				result = this.planeteOptions.abyssesLevel;
+			}
+		} else {
+			result = this.planeteOptions.waterLevel;
+		}
+		noisedVertex.multiplyScalar(result);
 		// console.log(noise(vertex.x, vertex.y, vertex.z));
 		return noisedVertex;
 	}
@@ -114,8 +119,8 @@ class Face {
 
 		const v1 = new THREE.Vector3(0,0,0);
 		const v2 = new THREE.Vector3(size/2,size/2,size/2);
-		const farestVertex = v1.distanceTo(v2);
-		const sliceSize = size/(resolution-1);
+		this.farestVertex = v1.distanceTo(v2);
+		this.sliceSize = size/(resolution-1);
 		// Verctors part
   		// Faces relative position
   		// X axis faces
@@ -124,30 +129,30 @@ class Face {
 		    for(let x=0; x<(resolution-1); x++) {
 			    for(let y=0; y<(resolution-1); y++) {
 
-			    		const ax = originVertex.x+x*sliceSize;
-			    		const ay = originVertex.y+y*sliceSize;
+			    		const ax = originVertex.x+x*this.sliceSize;
+			    		const ay = originVertex.y+y*this.sliceSize;
 			    		const az = originVertex.z;
-					    this.verteces.push(this.computeVertex(sliceSize, farestVertex,ax,ay,az));
-			    		const bx = originVertex.x+(x+1)*sliceSize;
-			    		const by = originVertex.y+(y+1)*sliceSize;
+					    this.verteces.push(this.computeVertex(ax,ay,az));
+			    		const bx = originVertex.x+(x+1)*this.sliceSize;
+			    		const by = originVertex.y+(y+1)*this.sliceSize;
 			    		const bz = originVertex.z;
-					    this.verteces.push(this.computeVertex(sliceSize, farestVertex,bx,by,bz));
-			    		const cx = originVertex.x+x*sliceSize;
-			    		const cy = originVertex.y+(y+1)*sliceSize;
+					    this.verteces.push(this.computeVertex(bx,by,bz));
+			    		const cx = originVertex.x+x*this.sliceSize;
+			    		const cy = originVertex.y+(y+1)*this.sliceSize;
 			    		const cz = originVertex.z;
-					    this.verteces.push(this.computeVertex(sliceSize, farestVertex,cx,cy,cz));
-			    		const dx = originVertex.x+x*sliceSize;
-			    		const dy = originVertex.y+y*sliceSize;
+					    this.verteces.push(this.computeVertex(cx,cy,cz));
+			    		const dx = originVertex.x+x*this.sliceSize;
+			    		const dy = originVertex.y+y*this.sliceSize;
 			    		const dz = originVertex.z;
-					    this.verteces.push(this.computeVertex(sliceSize, farestVertex,dx,dy,dz));
-			    		const ex = originVertex.x+(x+1)*sliceSize;
-			    		const ey = originVertex.y+y*sliceSize;
+					    this.verteces.push(this.computeVertex(dx,dy,dz));
+			    		const ex = originVertex.x+(x+1)*this.sliceSize;
+			    		const ey = originVertex.y+y*this.sliceSize;
 			    		const ez = originVertex.z;
-					    this.verteces.push(this.computeVertex(sliceSize, farestVertex,ex,ey,ez));
-			    		const fx = originVertex.x+(x+1)*sliceSize;
-			    		const fy = originVertex.y+(y+1)*sliceSize;
+					    this.verteces.push(this.computeVertex(ex,ey,ez));
+			    		const fx = originVertex.x+(x+1)*this.sliceSize;
+			    		const fy = originVertex.y+(y+1)*this.sliceSize;
 			    		const fz = originVertex.z;
-					    this.verteces.push(this.computeVertex(sliceSize, farestVertex,fx,fy,fz));
+					    this.verteces.push(this.computeVertex(fx,fy,fz));
 				}
 			}
   		} else if(face_index == 1) {
@@ -155,30 +160,30 @@ class Face {
 		    for(let x=0; x<(resolution-1); x++) {
 			    for(let y=0; y<(resolution-1); y++) {
 
-			    		const ax = originVertex.x+x*sliceSize;
-			    		const ay = originVertex.y+y*sliceSize;
+			    		const ax = originVertex.x+x*this.sliceSize;
+			    		const ay = originVertex.y+y*this.sliceSize;
 			    		const az = originVertex.z;
-					    this.verteces.push(this.computeVertex(sliceSize, farestVertex,ax,ay,az));
-			    		const bx = originVertex.x+(x+1)*sliceSize;
-			    		const by = originVertex.y+y*sliceSize;
+					    this.verteces.push(this.computeVertex(ax,ay,az));
+			    		const bx = originVertex.x+(x+1)*this.sliceSize;
+			    		const by = originVertex.y+y*this.sliceSize;
 			    		const bz = originVertex.z;
-					    this.verteces.push(this.computeVertex(sliceSize, farestVertex,bx,by,bz));
-			    		const cx = originVertex.x+x*sliceSize;
-			    		const cy = originVertex.y+(y+1)*sliceSize;
+					    this.verteces.push(this.computeVertex(bx,by,bz));
+			    		const cx = originVertex.x+x*this.sliceSize;
+			    		const cy = originVertex.y+(y+1)*this.sliceSize;
 			    		const cz = originVertex.z;
-					    this.verteces.push(this.computeVertex(sliceSize, farestVertex,cx,cy,cz));
-			    		const dx = originVertex.x+x*sliceSize;
-			    		const dy = originVertex.y+(y+1)*sliceSize;
+					    this.verteces.push(this.computeVertex(cx,cy,cz));
+			    		const dx = originVertex.x+x*this.sliceSize;
+			    		const dy = originVertex.y+(y+1)*this.sliceSize;
 			    		const dz = originVertex.z;
-					    this.verteces.push(this.computeVertex(sliceSize, farestVertex,dx,dy,dz));
-			    		const ex = originVertex.x+(x+1)*sliceSize;
-			    		const ey = originVertex.y+y*sliceSize;
+					    this.verteces.push(this.computeVertex(dx,dy,dz));
+			    		const ex = originVertex.x+(x+1)*this.sliceSize;
+			    		const ey = originVertex.y+y*this.sliceSize;
 			    		const ez = originVertex.z;
-					    this.verteces.push(this.computeVertex(sliceSize, farestVertex,ex,ey,ez));
-			    		const fx = originVertex.x+(x+1)*sliceSize;
-			    		const fy = originVertex.y+(y+1)*sliceSize;
+					    this.verteces.push(this.computeVertex(ex,ey,ez));
+			    		const fx = originVertex.x+(x+1)*this.sliceSize;
+			    		const fy = originVertex.y+(y+1)*this.sliceSize;
 			    		const fz = originVertex.z;
-					    this.verteces.push(this.computeVertex(sliceSize, farestVertex,fx,fy,fz));
+					    this.verteces.push(this.computeVertex(fx,fy,fz));
 				}
 			}
 		// Y axis faces
@@ -188,29 +193,29 @@ class Face {
 			    for(let y=0; y<(resolution-1); y++) {
 
 			    		const ax = originVertex.x;
-			    		const ay = originVertex.y+y*sliceSize;
-			    		const az = originVertex.z+(x+1)*sliceSize;
-					    this.verteces.push(this.computeVertex(sliceSize, farestVertex,ax,ay,az));
+			    		const ay = originVertex.y+y*this.sliceSize;
+			    		const az = originVertex.z+(x+1)*this.sliceSize;
+					    this.verteces.push(this.computeVertex(ax,ay,az));
 			    		const bx = originVertex.x;
-			    		const by = originVertex.y+(y+1)*sliceSize;
-			    		const bz = originVertex.z+(x+1)*sliceSize;
-					    this.verteces.push(this.computeVertex(sliceSize, farestVertex,bx,by,bz));
+			    		const by = originVertex.y+(y+1)*this.sliceSize;
+			    		const bz = originVertex.z+(x+1)*this.sliceSize;
+					    this.verteces.push(this.computeVertex(bx,by,bz));
 			    		const cx = originVertex.x;
-			    		const cy = originVertex.y+(y+1)*sliceSize;
-			    		const cz = originVertex.z+x*sliceSize;
-					    this.verteces.push(this.computeVertex(sliceSize, farestVertex,cx,cy,cz));
+			    		const cy = originVertex.y+(y+1)*this.sliceSize;
+			    		const cz = originVertex.z+x*this.sliceSize;
+					    this.verteces.push(this.computeVertex(cx,cy,cz));
 			    		const dx = originVertex.x;
-			    		const dy = originVertex.y+y*sliceSize;
-			    		const dz = originVertex.z+x*sliceSize;
-					    this.verteces.push(this.computeVertex(sliceSize, farestVertex,dx,dy,dz));
+			    		const dy = originVertex.y+y*this.sliceSize;
+			    		const dz = originVertex.z+x*this.sliceSize;
+					    this.verteces.push(this.computeVertex(dx,dy,dz));
 			    		const ex = originVertex.x;
-			    		const ey = originVertex.y+y*sliceSize;
-			    		const ez = originVertex.z+(x+1)*sliceSize;
-					    this.verteces.push(this.computeVertex(sliceSize, farestVertex,ex,ey,ez));
+			    		const ey = originVertex.y+y*this.sliceSize;
+			    		const ez = originVertex.z+(x+1)*this.sliceSize;
+					    this.verteces.push(this.computeVertex(ex,ey,ez));
 			    		const fx = originVertex.x;
-			    		const fy = originVertex.y+(y+1)*sliceSize;
-			    		const fz = originVertex.z+x*sliceSize;
-					    this.verteces.push(this.computeVertex(sliceSize, farestVertex,fx,fy,fz));
+			    		const fy = originVertex.y+(y+1)*this.sliceSize;
+			    		const fz = originVertex.z+x*this.sliceSize;
+					    this.verteces.push(this.computeVertex(fx,fy,fz));
 				}
 			}
   		} else if(face_index == 3) {
@@ -219,29 +224,29 @@ class Face {
 			    for(let y=0; y<(resolution-1); y++) {
 
 			    		const ax = originVertex.x;
-			    		const ay = originVertex.y+y*sliceSize;
-			    		const az = originVertex.z+x*sliceSize;
-					    this.verteces.push(this.computeVertex(sliceSize, farestVertex,ax,ay,az));
+			    		const ay = originVertex.y+y*this.sliceSize;
+			    		const az = originVertex.z+x*this.sliceSize;
+					    this.verteces.push(this.computeVertex(ax,ay,az));
 			    		const bx = originVertex.x;
-			    		const by = originVertex.y+(y+1)*sliceSize;
-			    		const bz = originVertex.z+(x+1)*sliceSize;
-					    this.verteces.push(this.computeVertex(sliceSize, farestVertex,bx,by,bz));
+			    		const by = originVertex.y+(y+1)*this.sliceSize;
+			    		const bz = originVertex.z+(x+1)*this.sliceSize;
+					    this.verteces.push(this.computeVertex(bx,by,bz));
 			    		const cx = originVertex.x;
-			    		const cy = originVertex.y+(y+1)*sliceSize;
-			    		const cz = originVertex.z+x*sliceSize;
-					    this.verteces.push(this.computeVertex(sliceSize, farestVertex,cx,cy,cz));
+			    		const cy = originVertex.y+(y+1)*this.sliceSize;
+			    		const cz = originVertex.z+x*this.sliceSize;
+					    this.verteces.push(this.computeVertex(cx,cy,cz));
 			    		const dx = originVertex.x;
-			    		const dy = originVertex.y+y*sliceSize;
-			    		const dz = originVertex.z+x*sliceSize;
-					    this.verteces.push(this.computeVertex(sliceSize, farestVertex,dx,dy,dz));
+			    		const dy = originVertex.y+y*this.sliceSize;
+			    		const dz = originVertex.z+x*this.sliceSize;
+					    this.verteces.push(this.computeVertex(dx,dy,dz));
 			    		const ex = originVertex.x;
-			    		const ey = originVertex.y+y*sliceSize;
-			    		const ez = originVertex.z+(x+1)*sliceSize;
-					    this.verteces.push(this.computeVertex(sliceSize, farestVertex,ex,ey,ez));
+			    		const ey = originVertex.y+y*this.sliceSize;
+			    		const ez = originVertex.z+(x+1)*this.sliceSize;
+					    this.verteces.push(this.computeVertex(ex,ey,ez));
 			    		const fx = originVertex.x;
-			    		const fy = originVertex.y+(y+1)*sliceSize;
-			    		const fz = originVertex.z+(x+1)*sliceSize;
-					    this.verteces.push(this.computeVertex(sliceSize, farestVertex,fx,fy,fz));
+			    		const fy = originVertex.y+(y+1)*this.sliceSize;
+			    		const fz = originVertex.z+(x+1)*this.sliceSize;
+					    this.verteces.push(this.computeVertex(fx,fy,fz));
 				}
 			}
   		// Z axis faces
@@ -250,30 +255,30 @@ class Face {
 		    for(let x=0; x<(resolution-1); x++) {
 			    for(let y=0; y<(resolution-1); y++) {
 
-			    		const ax = originVertex.x+x*sliceSize;
+			    		const ax = originVertex.x+x*this.sliceSize;
 			    		const ay = originVertex.y;
-			    		const az = originVertex.z+y*sliceSize;
-					    this.verteces.push(this.computeVertex(sliceSize, farestVertex,ax,ay,az));
-			    		const bx = originVertex.x+(x+1)*sliceSize;
+			    		const az = originVertex.z+y*this.sliceSize;
+					    this.verteces.push(this.computeVertex(ax,ay,az));
+			    		const bx = originVertex.x+(x+1)*this.sliceSize;
 			    		const by = originVertex.y;
-			    		const bz = originVertex.z+(y+1)*sliceSize;
-					    this.verteces.push(this.computeVertex(sliceSize, farestVertex,bx,by,bz));
-			    		const cx = originVertex.x+x*sliceSize;
+			    		const bz = originVertex.z+(y+1)*this.sliceSize;
+					    this.verteces.push(this.computeVertex(bx,by,bz));
+			    		const cx = originVertex.x+x*this.sliceSize;
 			    		const cy = originVertex.y;
-			    		const cz = originVertex.z+(y+1)*sliceSize;
-					    this.verteces.push(this.computeVertex(sliceSize, farestVertex,cx,cy,cz));
-			    		const dx = originVertex.x+x*sliceSize;
+			    		const cz = originVertex.z+(y+1)*this.sliceSize;
+					    this.verteces.push(this.computeVertex(cx,cy,cz));
+			    		const dx = originVertex.x+x*this.sliceSize;
 			    		const dy = originVertex.y;
-			    		const dz = originVertex.z+y*sliceSize;
-					    this.verteces.push(this.computeVertex(sliceSize, farestVertex,dx,dy,dz));
-			    		const ex = originVertex.x+(x+1)*sliceSize;
+			    		const dz = originVertex.z+y*this.sliceSize;
+					    this.verteces.push(this.computeVertex(dx,dy,dz));
+			    		const ex = originVertex.x+(x+1)*this.sliceSize;
 			    		const ey = originVertex.y;
-			    		const ez = originVertex.z+y*sliceSize;
-					    this.verteces.push(this.computeVertex(sliceSize, farestVertex,ex,ey,ez));
-			    		const fx = originVertex.x+(x+1)*sliceSize;
+			    		const ez = originVertex.z+y*this.sliceSize;
+					    this.verteces.push(this.computeVertex(ex,ey,ez));
+			    		const fx = originVertex.x+(x+1)*this.sliceSize;
 			    		const fy = originVertex.y;
-			    		const fz = originVertex.z+(y+1)*sliceSize;
-					    this.verteces.push(this.computeVertex(sliceSize, farestVertex,fx,fy,fz));
+			    		const fz = originVertex.z+(y+1)*this.sliceSize;
+					    this.verteces.push(this.computeVertex(fx,fy,fz));
 				}
 			}
   		} else if(face_index == 5) {
@@ -281,30 +286,30 @@ class Face {
 		    for(let x=0; x<(resolution-1); x++) {
 			    for(let y=0; y<(resolution-1); y++) {
 
-			    		const ax = originVertex.x+x*sliceSize;
+			    		const ax = originVertex.x+x*this.sliceSize;
 			    		const ay = originVertex.y;
-			    		const az = originVertex.z+y*sliceSize;
-					    this.verteces.push(this.computeVertex(sliceSize, farestVertex,ax,ay,az));
-			    		const bx = originVertex.x+(x+1)*sliceSize;
+			    		const az = originVertex.z+y*this.sliceSize;
+					    this.verteces.push(this.computeVertex(ax,ay,az));
+			    		const bx = originVertex.x+(x+1)*this.sliceSize;
 			    		const by = originVertex.y;
-			    		const bz = originVertex.z+y*sliceSize;
-					    this.verteces.push(this.computeVertex(sliceSize, farestVertex,bx,by,bz));
-			    		const cx = originVertex.x+x*sliceSize;
+			    		const bz = originVertex.z+y*this.sliceSize;
+					    this.verteces.push(this.computeVertex(bx,by,bz));
+			    		const cx = originVertex.x+x*this.sliceSize;
 			    		const cy = originVertex.y;
-			    		const cz = originVertex.z+(y+1)*sliceSize;
-					    this.verteces.push(this.computeVertex(sliceSize, farestVertex,cx,cy,cz));
-			    		const dx = originVertex.x+x*sliceSize;
+			    		const cz = originVertex.z+(y+1)*this.sliceSize;
+					    this.verteces.push(this.computeVertex(cx,cy,cz));
+			    		const dx = originVertex.x+x*this.sliceSize;
 			    		const dy = originVertex.y;
-			    		const dz = originVertex.z+(y+1)*sliceSize;
-					    this.verteces.push(this.computeVertex(sliceSize, farestVertex,dx,dy,dz));
-			    		const ex = originVertex.x+(x+1)*sliceSize;
+			    		const dz = originVertex.z+(y+1)*this.sliceSize;
+					    this.verteces.push(this.computeVertex(dx,dy,dz));
+			    		const ex = originVertex.x+(x+1)*this.sliceSize;
 			    		const ey = originVertex.y;
-			    		const ez = originVertex.z+y*sliceSize;
-					    this.verteces.push(this.computeVertex(sliceSize, farestVertex,ex,ey,ez));
-			    		const fx = originVertex.x+(x+1)*sliceSize;
+			    		const ez = originVertex.z+y*this.sliceSize;
+					    this.verteces.push(this.computeVertex(ex,ey,ez));
+			    		const fx = originVertex.x+(x+1)*this.sliceSize;
 			    		const fy = originVertex.y;
-			    		const fz = originVertex.z+(y+1)*sliceSize;
-					    this.verteces.push(this.computeVertex(sliceSize, farestVertex,fx,fy,fz));
+			    		const fz = originVertex.z+(y+1)*this.sliceSize;
+					    this.verteces.push(this.computeVertex(fx,fy,fz));
 				}
 			}
   		}
@@ -358,22 +363,28 @@ class Face {
 
 			geometry.faces.push(new THREE.Face3(0, 1, 2));
 			geometry.computeBoundingSphere();
-
+	    	// geometry.computeVertexNormals(true);
 			if(!secondMaterial) {
 				let mesh = new THREE.Mesh(geometry, firstMaterial);
+				// mesh.geometry.computeVertexNormals(true)
 				this.computed.add(mesh);
 			} else {
 
 				const center = new THREE.Vector3(0,0,0);
-				const coef = (
+				const averageHeight = (
 					center.distanceTo(this.verteces[i])
 					+ center.distanceTo(this.verteces[i+1])
 					+ center.distanceTo(this.verteces[i+2])
 					)/3;
 
-				if(coef >= this.planeteOptions.waterLevel * 260  || !this.planeteOptions.showWater){
-					this.computed.add(new THREE.Mesh(geometry, secondMaterial));
+				// if(coef >= this.planeteOptions.waterLevel * (this.planeteOptions.size-13)  || !this.planeteOptions.showWater){
+				if(averageHeight >= (this.planeteOptions.waterLevel*this.planeteOptions.size) - (this.planeteOptions.size / 15) || !this.planeteOptions.showWater){
+					let mesh = new THREE.Mesh(geometry, secondMaterial);
+					// mesh.geometry.computeVertexNormals(true);
+					this.computed.add(mesh);
 				} else {
+					let mesh = new THREE.Mesh(geometry, firstMaterial);
+					// mesh.geometry.computeVertexNormals(true);
 					this.computed.add(new THREE.Mesh(geometry, firstMaterial));
 				}
 			}

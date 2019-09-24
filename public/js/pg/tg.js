@@ -15,10 +15,12 @@ let renderer;
 let controls;
 let options = {
 	planete: {
-		size: 300,
+		size: 1,
 		resolution: 24,
 		showWater: true,
-		waterLevel: 0.56,
+		// waterLevel: 0.56,
+		abyssesLevel: 0.40,
+		waterLevel: 0.50,
 		// waterLevel: 1,
 	},
 	noise_beta: {
@@ -69,6 +71,7 @@ function setup() {
   	setupUI();
 
 	scene = new THREE.Scene();
+	fov = 100;
 	camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, fov );
 
 	renderer = new THREE.WebGLRenderer({antialias: true});
@@ -133,9 +136,9 @@ function setup() {
 		// side: THREE.DoubleSide,
 	});
 
-	// skybox = new Skybox();
-	// skybox.init(options.planete.size);
-	// skybox.draw();
+	skybox = new Skybox();
+	skybox.init(options.planete.size);
+	skybox.draw();
 
 	// planete = new ThreeCube(lineMaterial, waterMaterial);
 	planete = new ThreeCube();
@@ -144,8 +147,6 @@ function setup() {
 	// const waterGeometry = new THREE.SphereGeometry(options.planete.size/2, options.planete.resolution, options.planete.resolution);
 	// water = new THREE.Mesh(waterGeometry, waterMaterial);
 	// scene.add(water);
-
-	fov = 1000;
 
 	window.addEventListener("resize", () => windowResized());
 
@@ -167,6 +168,11 @@ function setupUI() {
 		planete.draw();
 	});
 	planetGui.add(options.planete, 'showWater', false, true).onChange(() => {
+		planete.remove();
+		planete.init(options.planete, options.noise_beta);
+		planete.draw();
+	});
+	planetGui.add(options.planete, 'abyssesLevel', 0.2, 1).onChange(() => {
 		planete.remove();
 		planete.init(options.planete, options.noise_beta);
 		planete.draw();
