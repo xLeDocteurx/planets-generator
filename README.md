@@ -12,15 +12,7 @@ Update : Went from P5.js to Three.js. P5 had a really low framerate at high reso
 
 ### How it works :
 For now it's a raw prototype.
-The magic append in 4 core loops, functions. (preload, setup, update, render)
-
-preload
-
-setup
-
-update
-
-render
+But you can run it with a simple "node server.js" from the root directory
 
 ### Things to come :
 - ~~Draw a 3D cube.~~
