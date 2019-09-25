@@ -21,11 +21,16 @@ But you can run it with a simple "node server.js" from the root directory
 - ~~Simple perlin noise modulation of the surface.~~
 - ~~A more complex noise engine with multiple layers and noises type.~~
 - ~~Coloring the polygons depending on their hight.~~
-- More colors for differents terrain types.
+- Control the Stregth of the noise applied to the sphere mesh.
+- More colors for differents terrain types. ( biomes maybe ? )
 - Only render the frontside of each polygon.
-- Each noise layer can be setup eparatly as well as the falloff between each layer.
+- A LOD systèm where the resolution of the planet change depending on the distance.
+- Rendering only the faces the user can see.
+- Each noise layer can be setup separatly as well as the falloff between each layer.
 - Struggle to developp a terrain erosion algorythm.
 - Bouyakasha.
+- Vegetation.
+- Life.
 
 
 
