@@ -32,6 +32,7 @@ let options = {
 		// waterLevel: 0.56,
 		abyssesLevel: 0.40,
 		waterLevel: 0.50,
+		groundLevel: 1,
 		// waterLevel: 1,
 	},
 	noise_beta: {
@@ -187,7 +188,7 @@ function setupUI() {
 	// 	planete.init(options.planete, options.noise_beta);
 	// 	planete.draw();
  //    });
-	planetGui.add(options.planete, 'resolution', 2, 64).name('Resolution').onChange(() => {
+	planetGui.add(options.planete, 'resolution', 2, 64).name('Polygons resolution').onChange(() => {
 		planete.remove();
 		planete.init(options.planete, options.noise_beta);
 		planete.draw();
@@ -197,12 +198,17 @@ function setupUI() {
 		planete.init(options.planete, options.noise_beta);
 		planete.draw();
 	});
-	planetGui.add(options.planete, 'abyssesLevel', 0.2, 1).onChange(() => {
+	planetGui.add(options.planete, 'abyssesLevel', 0.0, 1.0).onChange(() => {
 		planete.remove();
 		planete.init(options.planete, options.noise_beta);
 		planete.draw();
 	});
-	planetGui.add(options.planete, 'waterLevel', 0.2, 1).onChange(() => {
+	planetGui.add(options.planete, 'waterLevel', 0.0, 1.0).onChange(() => {
+		planete.remove();
+		planete.init(options.planete, options.noise_beta);
+		planete.draw();
+	});
+	planetGui.add(options.planete, 'groundLevel', 0.0, 2.0).onChange(() => {
 		planete.remove();
 		planete.init(options.planete, options.noise_beta);
 		planete.draw();
@@ -232,13 +238,13 @@ function setupUI() {
 		planete.init(options.planete, options.noise_beta);
 		planete.draw();
 	});
-	noiseBetaGui.add(options.noise_beta, 'falloff', 0, 1).onChange(() => {
+	noiseBetaGui.add(options.noise_beta, 'falloff', 0.0, 1.0).onChange(() => {
 		planete.remove();
 		noiseDetailChanged();
 		planete.init(options.planete, options.noise_beta);
 		planete.draw();
 	});
-	noiseBetaGui.add(options.noise_beta, 'strength', 0, 2).onChange(() => {
+	noiseBetaGui.add(options.noise_beta, 'strength', 0.0, 2.0).onChange(() => {
 		planete.remove();
 		planete.init(options.planete, options.noise_beta);
 		planete.draw();

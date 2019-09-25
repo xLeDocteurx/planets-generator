@@ -10,26 +10,38 @@ class Skybox {
 		const skyboxAssetsMaterial = [
 			new THREE.MeshBasicMaterial({
 				map: new THREE.TextureLoader().load("assets/sf-lightblue/right.png"), 
+				transparent: true,
+				opacity: 0.6,
 				side: THREE.DoubleSide
 			}),
 			new THREE.MeshBasicMaterial({
 				map: new THREE.TextureLoader().load("assets/sf-lightblue/left.png"), 
+				transparent: true,
+				opacity: 0.6,
 				side: THREE.DoubleSide
 			}),
 			new THREE.MeshBasicMaterial({
 				map: new THREE.TextureLoader().load("assets/sf-lightblue/top.png"), 
+				transparent: true,
+				opacity: 0.6,
 				side: THREE.DoubleSide
 			}),
 			new THREE.MeshBasicMaterial({
 				map: new THREE.TextureLoader().load("assets/sf-lightblue/bot.png"), 
+				transparent: true,
+				opacity: 0.6,
 				side: THREE.DoubleSide
 			}),
 			new THREE.MeshBasicMaterial({
 				map: new THREE.TextureLoader().load("assets/sf-lightblue/front.png"), 
+				transparent: true,
+				opacity: 0.6,
 				side: THREE.DoubleSide
 			}),
 			new THREE.MeshBasicMaterial({
 				map: new THREE.TextureLoader().load("assets/sf-lightblue/back.png"), 
+				transparent: true,
+				opacity: 0.6,
 				side: THREE.DoubleSide
 			}),
 		];

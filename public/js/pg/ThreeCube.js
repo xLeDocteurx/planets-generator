@@ -90,16 +90,19 @@ class Face {
 	applyNoiseToVertex(vertex){
 
 		let noisedVertex = new THREE.Vector3(vertex.x,vertex.y,vertex.z);
-		const noiseValue = noise(
+		let noiseValue = noise(
 			this.noiseOptions.offset + vertex.x / this.sliceSize * this.noiseOptions.scale, 
 			this.noiseOptions.offset + vertex.y / this.sliceSize * this.noiseOptions.scale, 
 			this.noiseOptions.offset + vertex.z / this.sliceSize * this.noiseOptions.scale
 		);
+		// ) - this.noiseOptions.strength;
 
 		let result;
+		noiseValue = noiseValue * this.planeteOptions.groundLevel;
+
 		if(/*0.5+*/noiseValue > this.planeteOptions.waterLevel || !this.planeteOptions.showWater){
 			if(/*0.5+*/noiseValue > this.planeteOptions.abyssesLevel){
-				result = /*0.5+*/noiseValue * this.noiseOptions.strength;
+				result = /*0.5+*/noiseValue;
 			} else {
 				result = this.planeteOptions.abyssesLevel;
 			}
