@@ -4,7 +4,7 @@ class Skybox {
 		this.computed = null;
 	}
 
-	init(planeteSize) {
+	init(planeteSize = 500) {
 
 		const skyboxGeometry = new THREE.CubeGeometry(planeteSize*100, planeteSize*100, planeteSize*100);
 		const skyboxAssetsMaterial = [

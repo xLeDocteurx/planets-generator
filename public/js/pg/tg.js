@@ -10,8 +10,8 @@ let scene;
 let camera;
 let fov;
 
-let ambientLight;
-let directionnalLight;
+// let ambientLight;
+// let directionnalLight;
 let pointLight1;
 let pointLight2;
 let pointLight3;
@@ -43,7 +43,7 @@ let options = {
 		octave: 4,
 		falloff: 0.5,
 		// falloff: 1,
-		strength: 1.0,
+		strength: 0.25,
 	},
 	// stop: function() {
 	//   this.velx = 0;
@@ -116,12 +116,6 @@ function setup() {
 	scene.add(pointLight3);
 
 	// Normal, Constant, Lambert, Phong, Blinn. materials type
-	// const material = new THREE.MeshLambertMaterial({			
-	const lineMaterial = new THREE.LineBasicMaterial({
-		color: 0xffffff, 
-		transparent: true, 
-		opacity: 0.5
-	});
 	const groundMaterial = new THREE.MeshPhongMaterial({
 		color: 0x8C3B0C, 
 		// emissive: 0x8C3B0C, 
@@ -136,17 +130,11 @@ function setup() {
 		side: THREE.DoubleSide, 
 		flatShading: true
 	});
-
-	const material = new THREE.MeshLambertMaterial({
-		color: 0x156289,
-		// wireframe: true,
-		side: THREE.DoubleSide,
-	});
-	const toonMaterial = new THREE.MeshToonMaterial({
-		color: 0xffff00,
-		// wireframe: true,
-		// side: THREE.DoubleSide,
-	});
+	// const toonMaterial = new THREE.MeshToonMaterial({
+	// 	color: 0xffff00,
+	// 	// wireframe: true,
+	// 	// side: THREE.DoubleSide,
+	// });
 
 	skybox = new Skybox();
 	skybox.init(options.planete.size);

@@ -102,7 +102,7 @@ class Face {
 
 		if(/*0.5+*/noiseValue > this.planeteOptions.waterLevel || !this.planeteOptions.showWater){
 			if(/*0.5+*/noiseValue > this.planeteOptions.abyssesLevel){
-				result = /*0.5+*/noiseValue;
+				result = (noiseValue*this.noiseOptions.strength)+((1-this.noiseOptions.strength)/2);
 			} else {
 				result = this.planeteOptions.abyssesLevel;
 			}
