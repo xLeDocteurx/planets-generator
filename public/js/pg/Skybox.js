@@ -1,12 +1,15 @@
 class Skybox {
 
-	constructor() {
+	constructor(planeteSize = 500){
+		this.planeteSize = planeteSize;
 		this.computed = null;
+
+		this.draw();
 	}
 
-	init(planeteSize = 500) {
+	init(planeteSize = this.planeteSize){
 
-		const skyboxGeometry = new THREE.CubeGeometry(planeteSize*100, planeteSize*100, planeteSize*100);
+		const skyboxGeometry = new THREE.CubeGeometry(this.planeteSize*100, this.planeteSize*100, this.planeteSize*100);
 		const skyboxAssetsMaterial = [
 			new THREE.MeshBasicMaterial({
 				map: new THREE.TextureLoader().load("assets/sf-lightblue/right.png"), 
@@ -51,11 +54,16 @@ class Skybox {
 	
 	}
 
-	draw() {
+	draw(){
+		this.init();
 		scene.add(this.computed);
 	}
 
-	remove() {
+	update(){
+
+	}
+
+	remove(){
 		scene.remove(this.computed);
 	}
 

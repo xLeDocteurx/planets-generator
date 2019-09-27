@@ -58,22 +58,12 @@ preload();
 
 setup();
 
-// DAT.GUI Related Stuff
-
-
-
-// animate();
-
-// let loop = setInterval(draw(), 1000/fr);
-// // Stop the loop
-// clearInterval(refreshIntervalId);
-
+// In case you need to preload ressources ( like the skybox texture, etc... )
 function preload() {
-
   	// bg = loadImage('./assets/002.jpg');
   	// font = loadFont('assets/inconsolata.otf');
 }
-
+// Setting up the environement
 function setup() {
 
 	noiseSeed(options.noise_beta.seed);
@@ -136,14 +126,16 @@ function setup() {
 	// 	// side: THREE.DoubleSide,
 	// });
 
-	skybox = new Skybox();
-	skybox.init(options.planete.size);
-	skybox.draw();
+	skybox = new Skybox(options.planete.size);
 
 	// planete = new ThreeCube(lineMaterial, waterMaterial);
-	planete = new ThreeCube();
+	// planete = new ThreeCube();
+	// planete = new ThreeCube2();
+
+	planete = new Planete();
 	planete.init(options.planete, options.noise_beta, waterMaterial, groundMaterial);
 	planete.draw();
+
 	// const waterGeometry = new THREE.SphereGeometry(options.planete.size/2, options.planete.resolution, options.planete.resolution);
 	// water = new THREE.Mesh(waterGeometry, waterMaterial);
 	// scene.add(water);
@@ -172,70 +164,46 @@ function setupUI() {
 
 	const planetGui = gui.addFolder('Planete');
 	// planetGui.add(options.planete, 'size', 1, 1000).name('Size').onChange(() => {
-	// 	planete.remove();
-	// 	planete.init(options.planete, options.noise_beta);
-	// 	planete.draw();
+	// 	planete.redraw(options.planete, options.noise_beta);
  //    });
 	planetGui.add(options.planete, 'resolution', 2, 64).name('Polygons resolution').onChange(() => {
-		planete.remove();
-		planete.init(options.planete, options.noise_beta);
-		planete.draw();
+		planete.redraw(options.planete, options.noise_beta);
 	});
 	planetGui.add(options.planete, 'showWater', false, true).onChange(() => {
-		planete.remove();
-		planete.init(options.planete, options.noise_beta);
-		planete.draw();
+		planete.redraw(options.planete, options.noise_beta);
 	});
 	planetGui.add(options.planete, 'abyssesLevel', 0.0, 1.0).onChange(() => {
-		planete.remove();
-		planete.init(options.planete, options.noise_beta);
-		planete.draw();
+		planete.redraw(options.planete, options.noise_beta);
 	});
 	planetGui.add(options.planete, 'waterLevel', 0.0, 1.0).onChange(() => {
-		planete.remove();
-		planete.init(options.planete, options.noise_beta);
-		planete.draw();
+		planete.redraw(options.planete, options.noise_beta);
 	});
 	planetGui.add(options.planete, 'groundLevel', 0.0, 2.0).onChange(() => {
-		planete.remove();
-		planete.init(options.planete, options.noise_beta);
-		planete.draw();
+		planete.redraw(options.planete, options.noise_beta);
 	});
 	planetGui.open();
 
 	const noiseBetaGui = gui.addFolder('Noise Beta');
 	noiseBetaGui.add(options.noise_beta, 'seed').onChange(() => {
-		planete.remove();
-		seedChanged();
-		planete.init(options.planete, options.noise_beta);
+		planete.redraw(options.planete, options.noise_beta);
 		planete.draw();
 	});
 	noiseBetaGui.add(options.noise_beta, 'offset', 0, 1000).onChange(() => {
-		planete.remove();
-		planete.init(options.planete, options.noise_beta);
-		planete.draw();
+		planete.redraw(options.planete, options.noise_beta);
 	});
 	noiseBetaGui.add(options.noise_beta, 'scale', 0.01, 0.5).onChange(() => {
-		planete.remove();
-		planete.init(options.planete, options.noise_beta);
-		planete.draw();
+		planete.redraw(options.planete, options.noise_beta);
 	});
 	noiseBetaGui.add(options.noise_beta, 'octave', 1, 16).onChange(() => {
-		planete.remove();
-		noiseDetailChanged();
-		planete.init(options.planete, options.noise_beta);
+		planete.redraw(options.planete, options.noise_beta);
 		planete.draw();
 	});
 	noiseBetaGui.add(options.noise_beta, 'falloff', 0.0, 1.0).onChange(() => {
-		planete.remove();
-		noiseDetailChanged();
-		planete.init(options.planete, options.noise_beta);
+		planete.redraw(options.planete, options.noise_beta);
 		planete.draw();
 	});
 	noiseBetaGui.add(options.noise_beta, 'strength', 0.0, 2.0).onChange(() => {
-		planete.remove();
-		planete.init(options.planete, options.noise_beta);
-		planete.draw();
+		planete.redraw(options.planete, options.noise_beta);
 	});
 	noiseBetaGui.open();
 
@@ -243,37 +211,31 @@ function setupUI() {
 
 }
 
+// Game's logic loop
 const update = function(){
-
 	// planete.rotation.x += 0.01;
 	// planete.rotation.y += 0.01;
-
 }
 
+// Render's logic loop
 const render = function(){
-
 	renderer.render( scene, camera );
-
 }
 
 const gameLoop = function(){
-
 	requestAnimationFrame( gameLoop );
 
 	update();
 	render();
-
 }
 gameLoop();
 
 function windowResized() {
-
   	const width = window.innerWidth;
   	const height = window.innerHeight;
   	renderer.setSize(width,height);
   	camera.aspect = width/height;
   	camera.updateProjectionMatrix();
-
 }
 
 function seedChanged() {
