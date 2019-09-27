@@ -27,7 +27,7 @@ let options = {
 	},
 	planete: {
 		size: 1,
-		resolution: 24,
+		resolution: 16,
 		showWater: true,
 		// waterLevel: 0.56,
 		abyssesLevel: 0.40,

@@ -152,6 +152,49 @@ class Planete {
 			    		const fy = originVertex.y+(y+1)*this.sliceSize;
 			    		const fz = originVertex.z;
 					    verticesArray.push(...this.computeVertex(fx,fy,fz));
+
+
+				  	// 	// Materials part
+					  //   for(let i=0;i<this.verticesArray.length;i+=3){
+							// // let geometry = new THREE.BufferGeometry();
+					    	
+							// // geometry.vertices.push(
+							// // 	this.verteces[i],
+							// // 	this.verteces[i+1],
+							// // 	this.verteces[i+2]
+							// // );
+
+							// // geometry.faces.push(new THREE.Face3(0, 1, 2));
+							// // geometry.computeBoundingSphere();
+					  //   	// geometry.computeVertexNormals(true);
+							// if(!secondMaterial) {
+							// 	let mesh = new THREE.Mesh(geometry, firstMaterial);
+							// 	// mesh.geometry.computeVertexNormals(true)
+							// 	this.computed.add(mesh);
+							// } else {
+
+							// 	const center = new THREE.Vector3(0,0,0);
+							// 	const averageHeight = (
+							// 		center.distanceTo(this.verteces[i])
+							// 		+ center.distanceTo(this.verteces[i+1])
+							// 		+ center.distanceTo(this.verteces[i+2])
+							// 		)/3;
+
+							// 	// if(coef >= this.planeteOptions.waterLevel * (this.planeteOptions.size-13)  || !this.planeteOptions.showWater){
+							// 	if(averageHeight >= (this.planeteOptions.waterLevel*this.planeteOptions.size) - (this.planeteOptions.size / 15) || !this.planeteOptions.showWater){
+							// 		let mesh = new THREE.Mesh(geometry, secondMaterial);
+							// 		// mesh.geometry.computeVertexNormals(true);
+							// 		this.computed.add(mesh);
+							// 	} else {
+							// 		let mesh = new THREE.Mesh(geometry, firstMaterial);
+							// 		// mesh.geometry.computeVertexNormals(true);
+							// 		this.computed.add(new THREE.Mesh(geometry, firstMaterial));
+							// 	}
+							// }
+
+					  //   }
+
+
 				}
 			}
   		} else if(face_index == 1) {
@@ -312,51 +355,12 @@ class Planete {
 				}
 			}
   		}
-
-  		// Materials part
-	    for(let i=0;i<this.verticesArray.length;i+=3){
-			// let geometry = new THREE.BufferGeometry();
-	    	
-			// geometry.vertices.push(
-			// 	this.verteces[i],
-			// 	this.verteces[i+1],
-			// 	this.verteces[i+2]
-			// );
-
-			// geometry.faces.push(new THREE.Face3(0, 1, 2));
-			// geometry.computeBoundingSphere();
-	    	// geometry.computeVertexNormals(true);
-			if(!secondMaterial) {
-				let mesh = new THREE.Mesh(geometry, firstMaterial);
-				// mesh.geometry.computeVertexNormals(true)
-				this.computed.add(mesh);
-			} else {
-
-				const center = new THREE.Vector3(0,0,0);
-				const averageHeight = (
-					center.distanceTo(this.verteces[i])
-					+ center.distanceTo(this.verteces[i+1])
-					+ center.distanceTo(this.verteces[i+2])
-					)/3;
-
-				// if(coef >= this.planeteOptions.waterLevel * (this.planeteOptions.size-13)  || !this.planeteOptions.showWater){
-				if(averageHeight >= (this.planeteOptions.waterLevel*this.planeteOptions.size) - (this.planeteOptions.size / 15) || !this.planeteOptions.showWater){
-					let mesh = new THREE.Mesh(geometry, secondMaterial);
-					// mesh.geometry.computeVertexNormals(true);
-					this.computed.add(mesh);
-				} else {
-					let mesh = new THREE.Mesh(geometry, firstMaterial);
-					// mesh.geometry.computeVertexNormals(true);
-					this.computed.add(new THREE.Mesh(geometry, firstMaterial));
-				}
-			}
-
-	    }
 		
 		let faceVertices = new Float32Array(verticesArray);
 
 		// itemSize = 3 because there are 3 values (components) per vertex
 		faceGeometry.addAttribute('position', new THREE.BufferAttribute(faceVertices, 3));
+		// faceGeometry.computeBoundingSphere();
 		let faceMesh = new THREE.Mesh(faceGeometry, this.secondMaterial);
 
 		this.computed.add(faceMesh);
