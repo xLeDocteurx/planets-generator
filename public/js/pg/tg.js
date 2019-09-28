@@ -27,10 +27,11 @@ let options = {
 	},
 	planete: {
 		size: 1,
-		resolution: 16,
+		resolution: 32,
 		showWater: true,
+		// abyssesLevel: 0.40,
+		abyssesLevel: 0.33,
 		// waterLevel: 0.56,
-		abyssesLevel: 0.40,
 		waterLevel: 0.50,
 		groundLevel: 1,
 		// waterLevel: 1,
@@ -105,18 +106,19 @@ function setup() {
 	scene.add(pointLight2);
 	scene.add(pointLight3);
 
-	// Normal, Constant, Lambert, Phong, Blinn. materials type
-	const groundMaterial = new THREE.MeshPhongMaterial({
-		color: 0x8C3B0C, 
-		// emissive: 0x8C3B0C, 
-		side: THREE.DoubleSide, 
-		flatShading: true
-	});
+	// Normal, Constant, Lambert, Phong, Blinn, Toon. materials type
 	const waterMaterial = new THREE.MeshPhongMaterial({
+		// wireframe:true,
 		// opacity: 0.85,
       	// transparent: true,
 		color: 0x156289, 
 		emissive: 0x072534, 
+		side: THREE.DoubleSide, 
+		flatShading: true,
+	});
+	const groundMaterial = new THREE.MeshPhongMaterial({
+		color: 0x8C3B0C, 
+		// emissive: 0x8C3B0C, 
 		side: THREE.DoubleSide, 
 		flatShading: true
 	});
@@ -128,17 +130,9 @@ function setup() {
 
 	skybox = new Skybox(options.planete.size);
 
-	// planete = new ThreeCube(lineMaterial, waterMaterial);
-	// planete = new ThreeCube();
-	// planete = new ThreeCube2();
-
 	planete = new Planete();
 	planete.init(options.planete, options.noise_beta, waterMaterial, groundMaterial);
 	planete.draw();
-
-	// const waterGeometry = new THREE.SphereGeometry(options.planete.size/2, options.planete.resolution, options.planete.resolution);
-	// water = new THREE.Mesh(waterGeometry, waterMaterial);
-	// scene.add(water);
 
 	window.addEventListener("resize", () => windowResized());
 
@@ -163,18 +157,18 @@ function setupUI() {
 	spaceGui.open();
 
 	const planetGui = gui.addFolder('Planete');
-	// planetGui.add(options.planete, 'size', 1, 1000).name('Size').onChange(() => {
+	// planetGui.add(options.planete, 'size', 1, 100).name('Size').onChange(() => {
 	// 	planete.redraw(options.planete, options.noise_beta);
  //    });
-	planetGui.add(options.planete, 'resolution', 2, 64).name('Polygons resolution').onChange(() => {
+	planetGui.add(options.planete, 'resolution', 2, 256).step(1).name('Resolution').onChange(() => {
 		planete.redraw(options.planete, options.noise_beta);
 	});
 	planetGui.add(options.planete, 'showWater', false, true).onChange(() => {
 		planete.redraw(options.planete, options.noise_beta);
 	});
-	planetGui.add(options.planete, 'abyssesLevel', 0.0, 1.0).onChange(() => {
-		planete.redraw(options.planete, options.noise_beta);
-	});
+	// planetGui.add(options.planete, 'abyssesLevel', 0.0, 1.0).onChange(() => {
+	// 	planete.redraw(options.planete, options.noise_beta);
+	// });
 	planetGui.add(options.planete, 'waterLevel', 0.0, 1.0).onChange(() => {
 		planete.redraw(options.planete, options.noise_beta);
 	});
@@ -186,21 +180,21 @@ function setupUI() {
 	const noiseBetaGui = gui.addFolder('Noise Beta');
 	noiseBetaGui.add(options.noise_beta, 'seed').onChange(() => {
 		planete.redraw(options.planete, options.noise_beta);
-		planete.draw();
+		// planete.draw();
 	});
-	noiseBetaGui.add(options.noise_beta, 'offset', 0, 1000).onChange(() => {
+	noiseBetaGui.add(options.noise_beta, 'offset', 0, 1000).step(1).onChange(() => {
 		planete.redraw(options.planete, options.noise_beta);
 	});
 	noiseBetaGui.add(options.noise_beta, 'scale', 0.01, 0.5).onChange(() => {
 		planete.redraw(options.planete, options.noise_beta);
 	});
-	noiseBetaGui.add(options.noise_beta, 'octave', 1, 16).onChange(() => {
+	noiseBetaGui.add(options.noise_beta, 'octave', 1, 16).step(1).onChange(() => {
 		planete.redraw(options.planete, options.noise_beta);
-		planete.draw();
+		// planete.draw();
 	});
 	noiseBetaGui.add(options.noise_beta, 'falloff', 0.0, 1.0).onChange(() => {
 		planete.redraw(options.planete, options.noise_beta);
-		planete.draw();
+		// planete.draw();
 	});
 	noiseBetaGui.add(options.noise_beta, 'strength', 0.0, 2.0).onChange(() => {
 		planete.redraw(options.planete, options.noise_beta);

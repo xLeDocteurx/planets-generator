@@ -4,25 +4,32 @@
 	<meta charset="UTF-8">
 	<title>Planets Generator</title>
 
-	<link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.css">
+	<!-- I keep those imports, just in case -->
+	<!-- <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.css"> -->
+	<!-- <script language="javascript" type="text/javascript" src="./node_modules/jquery/dist/jquery.js"></script> -->
+	<!-- <script language="javascript" type="text/javascript" src="./node_modules/bootstrap/dist/js/bootstrap.js"></script> -->
+	<!-- <script language="javascript" type="text/javascript" src="./js/lodash/core.js"></script> -->
 	<link rel="stylesheet" href="./css.css">
-	<script language="javascript" type="text/javascript" src="./node_modules/jquery/dist/jquery.js"></script>
-	<script language="javascript" type="text/javascript" src="./node_modules/bootstrap/dist/js/bootstrap.js"></script>
-	<script language="javascript" type="text/javascript" src="./js/lodash/core.js"></script>
-	<script language="javascript" type="text/javascript" src="./js/pg/noise.js"></script>
+
+	<!-- Three.js -->
 	<script language="javascript" type="text/javascript" src="./js/three.js"></script>
+	<!-- Cam library -->
 	<script language="javascript" type="text/javascript" src="./js/OrbitControls.js"></script>
+	<!-- UI library -->
 	<script language="javascript" type="text/javascript" src="./js/dat.gui.min.js"></script>
 
+	<!-- Noise functions extracted from P5.js wich was too heavy and in conflict with Three.js -->
+	<script language="javascript" type="text/javascript" src="./js/pg/noise.js"></script>
+	<!-- Class for the skybox -->
 	<script language="javascript" type="text/javascript" src="./js/pg/Skybox.js"></script>
+	<!-- Class for the planete -->
 	<script language="javascript" type="text/javascript" src="./js/pg/Planete.js"></script>
-	<!-- <script language="javascript" type="text/javascript" src="./js/pg/ThreeCube.js"></script> -->
-	<!-- <script language="javascript" type="text/javascript" src="./js/pg/ThreeCube2.js"></script> -->
 </head>
 <body>
 
 	<!-- <div id="canvas_container"></div> -->
 
+	<!-- Da script -->
 	<script language="javascript" type="text/javascript" src="./js/pg/tg.js"></script>
 </body>
 </html>

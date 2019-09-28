@@ -13,7 +13,7 @@ class Planete {
 		this.sliceSize = null;
 
 		this.faces = [];
-		this.computed = new THREE.Group();
+		this.computed = null;
 	}
 
 	init(planeteOptions, noiseOptions, firstMaterial = this.firstMaterial, secondMaterial = this.secondMaterial){
@@ -31,8 +31,9 @@ class Planete {
 		const v2 = new THREE.Vector3(size/2,size/2,size/2);
 		this.farestVertex = v1.distanceTo(v2);
 		//
-		this.sliceSize = size/resolution;
+		this.sliceSize = size/(resolution-1);
 		//
+		this.computed = new THREE.Group();
 		for (let i=0; i<6; i++) {
 			this.initAFace(i);
 		}
@@ -46,6 +47,7 @@ class Planete {
 		scene.remove(this.computed);
 	}
 
+	//
 	redraw(planeteOptions, noiseOptions){
 		this.remove();
 		this.init(planeteOptions, noiseOptions);
@@ -90,15 +92,18 @@ class Planete {
 		);
 		// ) - this.noiseOptions.strength;
 
-		noiseValue = noiseValue * this.planeteOptions.groundLevel;
+		//
+		let computedNoiseValue = (noiseValue * this.planeteOptions.groundLevel *this.noiseOptions.strength)+((1-this.noiseOptions.strength)/2);
 		let scalar;
 
-		if(/*0.5+*/noiseValue > this.planeteOptions.waterLevel || !this.planeteOptions.showWater){
-			if(/*0.5+*/noiseValue > this.planeteOptions.abyssesLevel){
-				scalar = (noiseValue*this.noiseOptions.strength)+((1-this.noiseOptions.strength)/2);
-			} else {
-				scalar = this.planeteOptions.abyssesLevel;
-			}
+		//
+		if(computedNoiseValue > this.planeteOptions.waterLevel || !this.planeteOptions.showWater){
+			// if(computedNoiseValue > this.planeteOptions.abyssesLevel){
+				//
+				scalar = computedNoiseValue;
+			// } else {
+			// 	scalar = this.planeteOptions.abyssesLevel;
+			// }
 		} else {
 			scalar = this.planeteOptions.waterLevel;
 		}
@@ -293,37 +298,6 @@ class Planete {
 			}
   		// Z axis faces
   		} else if(face_index == 4) {
-	    	const originVertex = new THREE.Vector3(-size/2,-size/2,-size/2);
-		    for(let x=0; x<(resolution-1); x++) {
-			    for(let y=0; y<(resolution-1); y++) {
-
-			    		const ax = originVertex.x+x*this.sliceSize;
-			    		const ay = originVertex.y;
-			    		const az = originVertex.z+y*this.sliceSize;
-					    verticesArray.push(...this.computeVertex(ax,ay,az));
-			    		const bx = originVertex.x+(x+1)*this.sliceSize;
-			    		const by = originVertex.y;
-			    		const bz = originVertex.z+(y+1)*this.sliceSize;
-					    verticesArray.push(...this.computeVertex(bx,by,bz));
-			    		const cx = originVertex.x+x*this.sliceSize;
-			    		const cy = originVertex.y;
-			    		const cz = originVertex.z+(y+1)*this.sliceSize;
-					    verticesArray.push(...this.computeVertex(cx,cy,cz));
-			    		const dx = originVertex.x+x*this.sliceSize;
-			    		const dy = originVertex.y;
-			    		const dz = originVertex.z+y*this.sliceSize;
-					    verticesArray.push(...this.computeVertex(dx,dy,dz));
-			    		const ex = originVertex.x+(x+1)*this.sliceSize;
-			    		const ey = originVertex.y;
-			    		const ez = originVertex.z+y*this.sliceSize;
-					    verticesArray.push(...this.computeVertex(ex,ey,ez));
-			    		const fx = originVertex.x+(x+1)*this.sliceSize;
-			    		const fy = originVertex.y;
-			    		const fz = originVertex.z+(y+1)*this.sliceSize;
-					    verticesArray.push(...this.computeVertex(fx,fy,fz));
-				}
-			}
-  		} else if(face_index == 5) {
 	    	const originVertex = new THREE.Vector3(-size/2,size/2,-size/2);
 		    for(let x=0; x<(resolution-1); x++) {
 			    for(let y=0; y<(resolution-1); y++) {
@@ -354,6 +328,37 @@ class Planete {
 					    verticesArray.push(...this.computeVertex(fx,fy,fz));
 				}
 			}
+  		} else if(face_index == 5) {
+	    	const originVertex = new THREE.Vector3(-size/2,-size/2,-size/2);
+		    for(let x=0; x<(resolution-1); x++) {
+			    for(let y=0; y<(resolution-1); y++) {
+
+			    		const ax = originVertex.x+x*this.sliceSize;
+			    		const ay = originVertex.y;
+			    		const az = originVertex.z+y*this.sliceSize;
+					    verticesArray.push(...this.computeVertex(ax,ay,az));
+			    		const bx = originVertex.x+(x+1)*this.sliceSize;
+			    		const by = originVertex.y;
+			    		const bz = originVertex.z+(y+1)*this.sliceSize;
+					    verticesArray.push(...this.computeVertex(bx,by,bz));
+			    		const cx = originVertex.x+x*this.sliceSize;
+			    		const cy = originVertex.y;
+			    		const cz = originVertex.z+(y+1)*this.sliceSize;
+					    verticesArray.push(...this.computeVertex(cx,cy,cz));
+			    		const dx = originVertex.x+x*this.sliceSize;
+			    		const dy = originVertex.y;
+			    		const dz = originVertex.z+y*this.sliceSize;
+					    verticesArray.push(...this.computeVertex(dx,dy,dz));
+			    		const ex = originVertex.x+(x+1)*this.sliceSize;
+			    		const ey = originVertex.y;
+			    		const ez = originVertex.z+y*this.sliceSize;
+					    verticesArray.push(...this.computeVertex(ex,ey,ez));
+			    		const fx = originVertex.x+(x+1)*this.sliceSize;
+			    		const fy = originVertex.y;
+			    		const fz = originVertex.z+(y+1)*this.sliceSize;
+					    verticesArray.push(...this.computeVertex(fx,fy,fz));
+				}
+			}
   		}
 		
 		let faceVertices = new Float32Array(verticesArray);
@@ -361,7 +366,7 @@ class Planete {
 		// itemSize = 3 because there are 3 values (components) per vertex
 		faceGeometry.addAttribute('position', new THREE.BufferAttribute(faceVertices, 3));
 		// faceGeometry.computeBoundingSphere();
-		let faceMesh = new THREE.Mesh(faceGeometry, this.secondMaterial);
+		let faceMesh = new THREE.Mesh(faceGeometry, this.firstMaterial);
 
 		this.computed.add(faceMesh);
 		// scene.add(faceMesh);
