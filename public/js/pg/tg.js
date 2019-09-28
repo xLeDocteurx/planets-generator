@@ -179,8 +179,8 @@ function setupUI() {
 
 	const noiseBetaGui = gui.addFolder('Noise Beta');
 	noiseBetaGui.add(options.noise_beta, 'seed').onChange(() => {
+		noiseSeed(options.noise_beta.seed);
 		planete.redraw(options.planete, options.noise_beta);
-		// planete.draw();
 	});
 	noiseBetaGui.add(options.noise_beta, 'offset', 0, 1000).step(1).onChange(() => {
 		planete.redraw(options.planete, options.noise_beta);
@@ -189,12 +189,12 @@ function setupUI() {
 		planete.redraw(options.planete, options.noise_beta);
 	});
 	noiseBetaGui.add(options.noise_beta, 'octave', 1, 16).step(1).onChange(() => {
+		noiseDetail(options.noise_beta.octave,options.noise_beta.falloff);
 		planete.redraw(options.planete, options.noise_beta);
-		// planete.draw();
 	});
 	noiseBetaGui.add(options.noise_beta, 'falloff', 0.0, 1.0).onChange(() => {
+		noiseDetail(options.noise_beta.octave,options.noise_beta.falloff);
 		planete.redraw(options.planete, options.noise_beta);
-		// planete.draw();
 	});
 	noiseBetaGui.add(options.noise_beta, 'strength', 0.0, 2.0).onChange(() => {
 		planete.redraw(options.planete, options.noise_beta);
