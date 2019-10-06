@@ -43,6 +43,10 @@ class Planete {
 		scene.add(this.computed);
 	}
 
+	drawAR(){
+		root.add(this.computed);
+	}
+
 	remove(){
 		scene.remove(this.computed);
 	}
@@ -66,7 +70,7 @@ class Planete {
 	}
 
 	normaliseVertex(vertex){
-
+		//
 		const h1 = new THREE.Vector3(0,0,0);
 		const h2 = new THREE.Vector3(vertex.x,vertex.y,vertex.z);
 		const hypo = h1.distanceTo(h2);
@@ -90,10 +94,16 @@ class Planete {
 			this.noiseOptions.offset + vertex.y / this.sliceSize * this.noiseOptions.scale, 
 			this.noiseOptions.offset + vertex.z / this.sliceSize * this.noiseOptions.scale
 		);
-		// ) - this.noiseOptions.strength;
+
+		// console.log("vertex ",vertex.x," ",vertex.y," ",vertex.z," / this.sliceSize ",this.sliceSize," : ",
+		// 	vertex.x / this.sliceSize, 
+		// 	vertex.y / this.sliceSize, 
+		// 	vertex.z / this.sliceSize
+		// );
 
 		//
-		let computedNoiseValue = (noiseValue * this.planeteOptions.groundLevel *this.noiseOptions.strength)+((1-this.noiseOptions.strength)/2);
+		let computedNoiseValue = (noiseValue * this.planeteOptions.groundLevel * this.noiseOptions.strength) + ((1 - this.noiseOptions.strength) / 2);
+		// let computedNoiseValue = noiseValue * this.planeteOptions.groundLevel * this.noiseOptions.strength;
 		let scalar;
 
 		//
