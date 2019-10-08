@@ -15,12 +15,15 @@ let pointLight3;
 let options = {
     space: {
         ambientLight: 0.0,
+        // ambientLight: 1.0,
         directionnalLight: 0.3,
-        pointLights: 1.0,
+        // pointLights: 1.0,
+        pointLights: 0.005,
     },
     planete: {
         size: 1,
         resolution: 24,
+        // resolution: 8,
         showWater: true,
         // showWater: false,
         // abyssesLevel: 0.40,
@@ -41,12 +44,9 @@ let options = {
         falloff: 0.5,
         // falloff: 1,
         // strength: 0.25,
-        strength: 1,
+        // strength: 1,
+        strength: 0.4,
     },
-    // stop: function() {
-    //   this.velx = 0;
-    //   this.vely = 0;
-    // },
 };
 
 function initAR(){
@@ -123,6 +123,7 @@ function init() {
 
     scene = new THREE.Scene();
 
+    // camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, fov );
     camera = new THREE.PerspectiveCamera();
 
     scene.add(camera);
@@ -131,7 +132,6 @@ function init() {
     // console.debug("scene", scene)
 
     root = initAR();
-
 
     //
     // ambientLight = new THREE.AmbientLight(0xFFFFFF, options.space.ambientLight);
@@ -162,6 +162,16 @@ function init() {
 
     //
     // Normal, Constant, Lambert, Phong, Blinn, Toon. materials type
+    const planeteMaterial = new THREE.MeshPhongMaterial({
+        // wireframe:true,
+        // opacity: 0.85,
+        // transparent: true,
+        // color: 0x156289, 
+        vertexColors: THREE.VertexColors,
+        // emissive: 0x072534, 
+        side: THREE.DoubleSide,
+        flatShading: true,
+    });
     const waterMaterial = new THREE.MeshPhongMaterial({
         // wireframe:true,
         // opacity: 0.85,
@@ -190,7 +200,8 @@ function init() {
     root.add(pointLight3);
 
     planete = new Planete();
-    planete.init(options.planete, options.noise_beta, waterMaterial, groundMaterial);
+    // planete.init(options.planete, options.noise_beta, waterMaterial, groundMaterial);
+    planete.init(options.planete, options.noise_beta, planeteMaterial);
     // planete.init(options.planete, options.noise_beta, toonMaterial);
     planete.drawAR();
 
@@ -225,6 +236,10 @@ function onWindowResize() {
 var lastTimeMsec= null;
 function animate(nowMsec) {
     requestAnimationFrame( animate );
+    
+    planete.computed.rotation.x += 0.01;
+    planete.computed.rotation.y += 0.01;
+
     renderer.render( scene, camera );
     // stats.update();
 

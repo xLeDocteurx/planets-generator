@@ -6,28 +6,31 @@ function setupUI(options) {
 	
 	const exportToAR = gui.addFolder('Export to AR');
 	const exportButton = {
-		get: () => { console.log("get button clicked") },
-		post: () => { console.log("post button clicked") },
-		shortlink: () => { console.log("shortlink button clicked") },
+		get: () => { console.log("get button clicked"); },
+		post: () => { console.log("post button clicked"); },
+		shortlink: () => { 
+			console.log("shortlink button clicked");
+			alert(`Your link to AR this planet is : https://localhost:3000/ar`);
+		},
 	};
-	exportToAR.add(exportButton, 'get').name('Get');
-	exportToAR.add(exportButton, 'post').name('Post');
+	// exportToAR.add(exportButton, 'get').name('Get');
+	// exportToAR.add(exportButton, 'post').name('Post');
 	exportToAR.add(exportButton, 'shortlink').name('Shortlink');
 	// exportToAR.open();
 
-	const spaceGui = gui.addFolder('Space');
-	// spaceGui.add(options.space, 'ambientLight', 0, 2).name('ambientLight').onChange(() => {
-	// 	ambientLight.intensity = options.space.ambientLight;
+	// const spaceGui = gui.addFolder('Space');
+	// // spaceGui.add(options.space, 'ambientLight', 0, 2).name('ambientLight').step(0.01).onChange(() => {
+	// // 	ambientLight.intensity = options.space.ambientLight;
+	// // });
+	// // spaceGui.add(options.space, 'directionnalLight', 0, 2).name('directionnalLight').step(0.01).onChange(() => {
+	// // 	directionnalLight.intensity = options.space.directionnalLight;
+	// // });
+	// spaceGui.add(options.space, 'pointLights', 0, 2).name('pointLights').step(0.01).onChange(() => {
+	// 	pointLight1.intensity = options.space.pointLights;
+	// 	pointLight2.intensity = options.space.pointLights;
+	// 	pointLight3.intensity = options.space.pointLights;
 	// });
-	// spaceGui.add(options.space, 'directionnalLight', 0, 2).name('directionnalLight').onChange(() => {
-	// 	directionnalLight.intensity = options.space.directionnalLight;
-	// });
-	spaceGui.add(options.space, 'pointLights', 0, 2).name('pointLights').onChange(() => {
-		pointLight1.intensity = options.space.pointLights;
-		pointLight2.intensity = options.space.pointLights;
-		pointLight3.intensity = options.space.pointLights;
-	});
-	spaceGui.open();
+	// spaceGui.open();
 
 	const planetGui = gui.addFolder('Planete');
 	// planetGui.add(options.planete, 'size', 1, 100).name('Size').onChange(() => {
@@ -50,7 +53,7 @@ function setupUI(options) {
 	});
 	planetGui.open();
 
-	const noiseBetaGui = gui.addFolder('Noise Beta');
+	const noiseBetaGui = gui.addFolder('Noise Engine Beta');
 	noiseBetaGui.add(options.noise_beta, 'seed').onChange(() => {
 		noiseSeed(options.noise_beta.seed);
 		planete.redraw(options.planete, options.noise_beta);

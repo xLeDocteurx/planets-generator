@@ -44,6 +44,7 @@ class Planete {
 	}
 
 	drawAR(){
+    	// this.computed.position.z = -this.planeteOptions.planete.size*2;
 		root.add(this.computed);
 	}
 
@@ -127,13 +128,29 @@ class Planete {
 		// return noisedVertex;
 	}
 
+	colorVertex(x,y,z){
+    	const center = new THREE.Vector3(0,0,0);
+		const distanceFromCenter = new THREE.Vector3(x,y,z).distanceTo(center);
+		if(distanceFromCenter >= (this.planeteOptions.waterLevel*this.planeteOptions.size) - (this.planeteOptions.size / 15) || !this.planeteOptions.showWater){
+	    // if(distanceFromCenter >= this.planeteOptions.waterLevel || !this.planeteOptions.showWater){
+	    	// Ground
+	    	// console.log("ground");
+	    	return [140,59,12];
+	    } else {
+	    	// Water
+	    	// console.log("water");
+	    	return [21,98,137];
+	    }
+	}
+
 	initAFace(face_index){
 		//
 		const {size, resolution} = this.planeteOptions;
 
 		//
-		let faceGeometry = new THREE.BufferGeometry();
+		let faceGeometry = new THREE.BufferGeometry()/*.toNonIndexed()*/;
 		let verticesArray = [];
+		let colorsArray = [];
 
 		// Vertices part
   		// Faces relative position
@@ -146,69 +163,41 @@ class Planete {
 			    		const ax = originVertex.x+x*this.sliceSize;
 			    		const ay = originVertex.y+y*this.sliceSize;
 			    		const az = originVertex.z;
-					    verticesArray.push(...this.computeVertex(ax,ay,az));
+					    const computedA = this.computeVertex(ax,ay,az);
+					    verticesArray.push(...computedA);
+			    		colorsArray.push(...this.colorVertex(...computedA));
 			    		const bx = originVertex.x+(x+1)*this.sliceSize;
 			    		const by = originVertex.y+(y+1)*this.sliceSize;
 			    		const bz = originVertex.z;
-					    verticesArray.push(...this.computeVertex(bx,by,bz));
+					    const computedB = this.computeVertex(bx,by,bz);
+					    verticesArray.push(...computedB);
+			    		colorsArray.push(...this.colorVertex(...computedB));
 			    		const cx = originVertex.x+x*this.sliceSize;
 			    		const cy = originVertex.y+(y+1)*this.sliceSize;
 			    		const cz = originVertex.z;
-					    verticesArray.push(...this.computeVertex(cx,cy,cz));
+					    const computedC = this.computeVertex(cx,cy,cz);
+					    verticesArray.push(...computedC);
+			    		colorsArray.push(...this.colorVertex(...computedC));
+
+			    		//
 			    		const dx = originVertex.x+x*this.sliceSize;
 			    		const dy = originVertex.y+y*this.sliceSize;
 			    		const dz = originVertex.z;
-					    verticesArray.push(...this.computeVertex(dx,dy,dz));
+					    const computedD = this.computeVertex(dx,dy,dz);
+					    verticesArray.push(...computedD);
+			    		colorsArray.push(...this.colorVertex(...computedD));
 			    		const ex = originVertex.x+(x+1)*this.sliceSize;
 			    		const ey = originVertex.y+y*this.sliceSize;
 			    		const ez = originVertex.z;
-					    verticesArray.push(...this.computeVertex(ex,ey,ez));
+					    const computedE = this.computeVertex(ex,ey,ez);
+					    verticesArray.push(...computedE);
+			    		colorsArray.push(...this.colorVertex(...computedE));
 			    		const fx = originVertex.x+(x+1)*this.sliceSize;
 			    		const fy = originVertex.y+(y+1)*this.sliceSize;
 			    		const fz = originVertex.z;
-					    verticesArray.push(...this.computeVertex(fx,fy,fz));
-
-
-				  	// 	// Materials part
-					  //   for(let i=0;i<this.verticesArray.length;i+=3){
-							// // let geometry = new THREE.BufferGeometry();
-					    	
-							// // geometry.vertices.push(
-							// // 	this.verteces[i],
-							// // 	this.verteces[i+1],
-							// // 	this.verteces[i+2]
-							// // );
-
-							// // geometry.faces.push(new THREE.Face3(0, 1, 2));
-							// // geometry.computeBoundingSphere();
-					  //   	// geometry.computeVertexNormals(true);
-							// if(!secondMaterial) {
-							// 	let mesh = new THREE.Mesh(geometry, firstMaterial);
-							// 	// mesh.geometry.computeVertexNormals(true)
-							// 	this.computed.add(mesh);
-							// } else {
-
-							// 	const center = new THREE.Vector3(0,0,0);
-							// 	const averageHeight = (
-							// 		center.distanceTo(this.verteces[i])
-							// 		+ center.distanceTo(this.verteces[i+1])
-							// 		+ center.distanceTo(this.verteces[i+2])
-							// 		)/3;
-
-							// 	// if(coef >= this.planeteOptions.waterLevel * (this.planeteOptions.size-13)  || !this.planeteOptions.showWater){
-							// 	if(averageHeight >= (this.planeteOptions.waterLevel*this.planeteOptions.size) - (this.planeteOptions.size / 15) || !this.planeteOptions.showWater){
-							// 		let mesh = new THREE.Mesh(geometry, secondMaterial);
-							// 		// mesh.geometry.computeVertexNormals(true);
-							// 		this.computed.add(mesh);
-							// 	} else {
-							// 		let mesh = new THREE.Mesh(geometry, firstMaterial);
-							// 		// mesh.geometry.computeVertexNormals(true);
-							// 		this.computed.add(new THREE.Mesh(geometry, firstMaterial));
-							// 	}
-							// }
-
-					  //   }
-
+					    const computedF = this.computeVertex(fx,fy,fz);
+					    verticesArray.push(...computedF);
+					    colorsArray.push(...this.colorVertex(...computedF));
 
 				}
 			}
@@ -220,28 +209,44 @@ class Planete {
 			    		const ax = originVertex.x+x*this.sliceSize;
 			    		const ay = originVertex.y+y*this.sliceSize;
 			    		const az = originVertex.z;
-					    verticesArray.push(...this.computeVertex(ax,ay,az));
+					    const computedA = this.computeVertex(ax,ay,az);
+					    verticesArray.push(...computedA);
+			    		colorsArray.push(...this.colorVertex(...computedA));
 			    		const bx = originVertex.x+(x+1)*this.sliceSize;
 			    		const by = originVertex.y+y*this.sliceSize;
 			    		const bz = originVertex.z;
-					    verticesArray.push(...this.computeVertex(bx,by,bz));
+					    const computedB = this.computeVertex(bx,by,bz);
+					    verticesArray.push(...computedB);
+			    		colorsArray.push(...this.colorVertex(...computedB));
 			    		const cx = originVertex.x+x*this.sliceSize;
 			    		const cy = originVertex.y+(y+1)*this.sliceSize;
 			    		const cz = originVertex.z;
-					    verticesArray.push(...this.computeVertex(cx,cy,cz));
+					    const computedC = this.computeVertex(cx,cy,cz);
+					    verticesArray.push(...computedC);
+			    		colorsArray.push(...this.colorVertex(...computedC));
+
+			    		//
 			    		const dx = originVertex.x+x*this.sliceSize;
 			    		const dy = originVertex.y+(y+1)*this.sliceSize;
 			    		const dz = originVertex.z;
-					    verticesArray.push(...this.computeVertex(dx,dy,dz));
+					    const computedD = this.computeVertex(dx,dy,dz);
+					    verticesArray.push(...computedD);
+			    		colorsArray.push(...this.colorVertex(...computedD));
 			    		const ex = originVertex.x+(x+1)*this.sliceSize;
 			    		const ey = originVertex.y+y*this.sliceSize;
 			    		const ez = originVertex.z;
-					    verticesArray.push(...this.computeVertex(ex,ey,ez));
+					    const computedE = this.computeVertex(ex,ey,ez);
+					    verticesArray.push(...computedE);
+			    		colorsArray.push(...this.colorVertex(...computedE));
 			    		const fx = originVertex.x+(x+1)*this.sliceSize;
 			    		const fy = originVertex.y+(y+1)*this.sliceSize;
 			    		const fz = originVertex.z;
-					    verticesArray.push(...this.computeVertex(fx,fy,fz));
-				}
+					    const computedF = this.computeVertex(fx,fy,fz);
+					    verticesArray.push(...computedF);
+					    colorsArray.push(...this.colorVertex(...computedF));
+
+				}						
+
 			}
 		// Y axis faces
   		} else if(face_index == 2) {
@@ -252,28 +257,44 @@ class Planete {
 			    		const ax = originVertex.x;
 			    		const ay = originVertex.y+y*this.sliceSize;
 			    		const az = originVertex.z+(x+1)*this.sliceSize;
-					    verticesArray.push(...this.computeVertex(ax,ay,az));
+					    const computedA = this.computeVertex(ax,ay,az);
+					    verticesArray.push(...computedA);
+			    		colorsArray.push(...this.colorVertex(...computedA));
 			    		const bx = originVertex.x;
 			    		const by = originVertex.y+(y+1)*this.sliceSize;
 			    		const bz = originVertex.z+(x+1)*this.sliceSize;
-					    verticesArray.push(...this.computeVertex(bx,by,bz));
+					    const computedB = this.computeVertex(bx,by,bz);
+					    verticesArray.push(...computedB);
+			    		colorsArray.push(...this.colorVertex(...computedB));
 			    		const cx = originVertex.x;
 			    		const cy = originVertex.y+(y+1)*this.sliceSize;
 			    		const cz = originVertex.z+x*this.sliceSize;
-					    verticesArray.push(...this.computeVertex(cx,cy,cz));
+					    const computedC = this.computeVertex(cx,cy,cz);
+					    verticesArray.push(...computedC);
+			    		colorsArray.push(...this.colorVertex(...computedC));
+
+			    		//
 			    		const dx = originVertex.x;
 			    		const dy = originVertex.y+y*this.sliceSize;
 			    		const dz = originVertex.z+x*this.sliceSize;
-					    verticesArray.push(...this.computeVertex(dx,dy,dz));
+					    const computedD = this.computeVertex(dx,dy,dz);
+					    verticesArray.push(...computedD);
+			    		colorsArray.push(...this.colorVertex(...computedD));
 			    		const ex = originVertex.x;
 			    		const ey = originVertex.y+y*this.sliceSize;
 			    		const ez = originVertex.z+(x+1)*this.sliceSize;
-					    verticesArray.push(...this.computeVertex(ex,ey,ez));
+					    const computedE = this.computeVertex(ex,ey,ez);
+					    verticesArray.push(...computedE);
+			    		colorsArray.push(...this.colorVertex(...computedE));
 			    		const fx = originVertex.x;
 			    		const fy = originVertex.y+(y+1)*this.sliceSize;
 			    		const fz = originVertex.z+x*this.sliceSize;
-					    verticesArray.push(...this.computeVertex(fx,fy,fz));
-				}
+					    const computedF = this.computeVertex(fx,fy,fz);
+					    verticesArray.push(...computedF);
+					    colorsArray.push(...this.colorVertex(...computedF));
+
+				}						
+
 			}
   		} else if(face_index == 3) {
 	    	const originVertex = new THREE.Vector3(-size/2,-size/2,-size/2);
@@ -283,28 +304,44 @@ class Planete {
 			    		const ax = originVertex.x;
 			    		const ay = originVertex.y+y*this.sliceSize;
 			    		const az = originVertex.z+x*this.sliceSize;
-					    verticesArray.push(...this.computeVertex(ax,ay,az));
+					    const computedA = this.computeVertex(ax,ay,az);
+					    verticesArray.push(...computedA);
+			    		colorsArray.push(...this.colorVertex(...computedA));
 			    		const bx = originVertex.x;
 			    		const by = originVertex.y+(y+1)*this.sliceSize;
 			    		const bz = originVertex.z+(x+1)*this.sliceSize;
-					    verticesArray.push(...this.computeVertex(bx,by,bz));
+					    const computedB = this.computeVertex(bx,by,bz);
+					    verticesArray.push(...computedB);
+			    		colorsArray.push(...this.colorVertex(...computedB));
 			    		const cx = originVertex.x;
 			    		const cy = originVertex.y+(y+1)*this.sliceSize;
 			    		const cz = originVertex.z+x*this.sliceSize;
-					    verticesArray.push(...this.computeVertex(cx,cy,cz));
+					    const computedC = this.computeVertex(cx,cy,cz);
+					    verticesArray.push(...computedC);
+			    		colorsArray.push(...this.colorVertex(...computedC));
+
+			    		//
 			    		const dx = originVertex.x;
 			    		const dy = originVertex.y+y*this.sliceSize;
 			    		const dz = originVertex.z+x*this.sliceSize;
-					    verticesArray.push(...this.computeVertex(dx,dy,dz));
+					    const computedD = this.computeVertex(dx,dy,dz);
+					    verticesArray.push(...computedD);
+			    		colorsArray.push(...this.colorVertex(...computedD));
 			    		const ex = originVertex.x;
 			    		const ey = originVertex.y+y*this.sliceSize;
 			    		const ez = originVertex.z+(x+1)*this.sliceSize;
-					    verticesArray.push(...this.computeVertex(ex,ey,ez));
+					    const computedE = this.computeVertex(ex,ey,ez);
+					    verticesArray.push(...computedE);
+			    		colorsArray.push(...this.colorVertex(...computedE));
 			    		const fx = originVertex.x;
 			    		const fy = originVertex.y+(y+1)*this.sliceSize;
 			    		const fz = originVertex.z+(x+1)*this.sliceSize;
-					    verticesArray.push(...this.computeVertex(fx,fy,fz));
-				}
+					    const computedF = this.computeVertex(fx,fy,fz);
+					    verticesArray.push(...computedF);
+					    colorsArray.push(...this.colorVertex(...computedF));
+
+				}						
+
 			}
   		// Z axis faces
   		} else if(face_index == 4) {
@@ -315,28 +352,44 @@ class Planete {
 			    		const ax = originVertex.x+x*this.sliceSize;
 			    		const ay = originVertex.y;
 			    		const az = originVertex.z+y*this.sliceSize;
-					    verticesArray.push(...this.computeVertex(ax,ay,az));
+					    const computedA = this.computeVertex(ax,ay,az);
+					    verticesArray.push(...computedA);
+			    		colorsArray.push(...this.colorVertex(...computedA));
 			    		const bx = originVertex.x+(x+1)*this.sliceSize;
 			    		const by = originVertex.y;
 			    		const bz = originVertex.z+y*this.sliceSize;
-					    verticesArray.push(...this.computeVertex(bx,by,bz));
+					    const computedB = this.computeVertex(bx,by,bz);
+					    verticesArray.push(...computedB);
+			    		colorsArray.push(...this.colorVertex(...computedB));
 			    		const cx = originVertex.x+x*this.sliceSize;
 			    		const cy = originVertex.y;
 			    		const cz = originVertex.z+(y+1)*this.sliceSize;
-					    verticesArray.push(...this.computeVertex(cx,cy,cz));
+					    const computedC = this.computeVertex(cx,cy,cz);
+					    verticesArray.push(...computedC);
+			    		colorsArray.push(...this.colorVertex(...computedC));
+
+			    		//
 			    		const dx = originVertex.x+x*this.sliceSize;
 			    		const dy = originVertex.y;
 			    		const dz = originVertex.z+(y+1)*this.sliceSize;
-					    verticesArray.push(...this.computeVertex(dx,dy,dz));
+					    const computedD = this.computeVertex(dx,dy,dz);
+					    verticesArray.push(...computedD);
+			    		colorsArray.push(...this.colorVertex(...computedD));
 			    		const ex = originVertex.x+(x+1)*this.sliceSize;
 			    		const ey = originVertex.y;
 			    		const ez = originVertex.z+y*this.sliceSize;
-					    verticesArray.push(...this.computeVertex(ex,ey,ez));
+					    const computedE = this.computeVertex(ex,ey,ez);
+					    verticesArray.push(...computedE);
+			    		colorsArray.push(...this.colorVertex(...computedE));
 			    		const fx = originVertex.x+(x+1)*this.sliceSize;
 			    		const fy = originVertex.y;
 			    		const fz = originVertex.z+(y+1)*this.sliceSize;
-					    verticesArray.push(...this.computeVertex(fx,fy,fz));
-				}
+					    const computedF = this.computeVertex(fx,fy,fz);
+					    verticesArray.push(...computedF);
+					    colorsArray.push(...this.colorVertex(...computedF));
+
+				}						
+
 			}
   		} else if(face_index == 5) {
 	    	const originVertex = new THREE.Vector3(-size/2,-size/2,-size/2);
@@ -346,42 +399,62 @@ class Planete {
 			    		const ax = originVertex.x+x*this.sliceSize;
 			    		const ay = originVertex.y;
 			    		const az = originVertex.z+y*this.sliceSize;
-					    verticesArray.push(...this.computeVertex(ax,ay,az));
+					    const computedA = this.computeVertex(ax,ay,az);
+					    verticesArray.push(...computedA);
+			    		colorsArray.push(...this.colorVertex(...computedA));
 			    		const bx = originVertex.x+(x+1)*this.sliceSize;
 			    		const by = originVertex.y;
 			    		const bz = originVertex.z+(y+1)*this.sliceSize;
-					    verticesArray.push(...this.computeVertex(bx,by,bz));
+					    const computedB = this.computeVertex(bx,by,bz);
+					    verticesArray.push(...computedB);
+			    		colorsArray.push(...this.colorVertex(...computedB));
 			    		const cx = originVertex.x+x*this.sliceSize;
 			    		const cy = originVertex.y;
 			    		const cz = originVertex.z+(y+1)*this.sliceSize;
-					    verticesArray.push(...this.computeVertex(cx,cy,cz));
+					    const computedC = this.computeVertex(cx,cy,cz);
+					    verticesArray.push(...computedC);
+			    		colorsArray.push(...this.colorVertex(...computedC));
+
+			    		//
 			    		const dx = originVertex.x+x*this.sliceSize;
 			    		const dy = originVertex.y;
 			    		const dz = originVertex.z+y*this.sliceSize;
-					    verticesArray.push(...this.computeVertex(dx,dy,dz));
+					    const computedD = this.computeVertex(dx,dy,dz);
+					    verticesArray.push(...computedD);
+			    		colorsArray.push(...this.colorVertex(...computedD));
 			    		const ex = originVertex.x+(x+1)*this.sliceSize;
 			    		const ey = originVertex.y;
 			    		const ez = originVertex.z+y*this.sliceSize;
-					    verticesArray.push(...this.computeVertex(ex,ey,ez));
+					    const computedE = this.computeVertex(ex,ey,ez);
+					    verticesArray.push(...computedE);
+			    		colorsArray.push(...this.colorVertex(...computedE));
 			    		const fx = originVertex.x+(x+1)*this.sliceSize;
 			    		const fy = originVertex.y;
 			    		const fz = originVertex.z+(y+1)*this.sliceSize;
-					    verticesArray.push(...this.computeVertex(fx,fy,fz));
-				}
+					    const computedF = this.computeVertex(fx,fy,fz);
+					    verticesArray.push(...computedF);
+					    colorsArray.push(...this.colorVertex(...computedF));
+
+				}						
+
 			}
   		}
 		
 		let faceVertices = new Float32Array(verticesArray);
+		let faceColors = new Float32Array(colorsArray);
 
 		// itemSize = 3 because there are 3 values (components) per vertex
 		faceGeometry.addAttribute('position', new THREE.BufferAttribute(faceVertices, 3));
+		faceGeometry.addAttribute('color', new THREE.BufferAttribute(faceColors, 3));
+		faceGeometry.computeVertexNormals(true);
 		// faceGeometry.computeBoundingSphere();
+		// let faceMesh = new THREE.Mesh(faceGeometry, this.firstMaterial);
 		let faceMesh = new THREE.Mesh(faceGeometry, this.firstMaterial);
+		// faceMesh.geometry.computeVertexNormals(true)
 
 		this.computed.add(faceMesh);
 		// scene.add(faceMesh);
 		// let mesh = new THREE.Mesh(geometry, firstMaterial);
-		// // mesh.geometry.computeVertexNormals(true)
 		// this.computed.add(mesh);
 
 	}
