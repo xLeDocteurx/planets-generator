@@ -22,7 +22,9 @@ But you can run it with a simple "node server.js" from the root directory
 - ~~A more complex noise engine with multiple layers and noises type.~~
 - ~~Coloring the polygons depending on their hight.~~
 - ~~Control the Strength of the noise applied to the sphere mesh.~~
-- ~~Go from Geometry to BufferGeometry for performances purpose.~~
+- ~~Go from Geometry to BufferGeometry for performances purpose.~~*
+- Fix the resolution problem.
+- Fix the lighting problem.
 - More colors for differents terrain types. ( biomes maybe ? )
 - Only render the frontside of each polygon.
 - A LOD systèm where the resolution of the planet change depending on the distance.
