@@ -78,10 +78,6 @@ io.on("connection", (client) => {
 	clients.push(client);
 	rooms.push(client.id);
 
-	// client.join('room 237', () => {
-	//     let rooms = Object.keys(client.rooms);
-	//     console.log(rooms); // [ <client.id>, 'room 237' ]
-	// });
 	// console.log("New connected users list : ", allClients);
 	// console.log("New rooms list : ", allClients);
 		
@@ -105,9 +101,9 @@ io.on("connection", (client) => {
 		console.log("Error : ", error);
 	});
 
-	client.on("updateOptions", (datas) => {
-		//client.emit("updateOptions", datas);
-		client.broadcast.emit("updateOptions", datas);
+	client.on("updateOptions", (options) => {
+		//client.emit("updateOptions", options);
+		client.to(client.id).broadcast.emit("updateOptions", options);
 	});
 
 	client.on("joinARoom", (roomId) => {

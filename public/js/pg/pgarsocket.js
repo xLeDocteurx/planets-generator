@@ -36,25 +36,15 @@ let options = {
 };
 
 let socket = io.connect();
+socket.on("updateOptions", receivedOptions);
 socket.on("socketError", receivedSocketError);
-// socket.on("mouse", newDrawing);
-// socket.on("refresh", refresh);
 
-console.log("pgarsocket roomId : ", roomId);
 socket.emit("joinARoom", roomId);
+
+function receivedOptions(newOptions) {
+	options = newOptions;
+}
 
 function receivedSocketError(errorMessage){
 	alert(errorMessage);
 }
-
-// function newDrawing(datas) {
-
-// }
-
-// function send_refresh() {
-//     socket.emit("refresh");
-// }
-
-// function refresh() {
-
-// }
