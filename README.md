@@ -2,7 +2,7 @@
 
 ~~A small P5.js planets 3D generator~~
 
-A small Three.js planets 3D generator
+A small Three.js planets 3D generator. ( And an AR planets visualizer )
 
 https://planets-generator.herokuapp.com
 
@@ -23,6 +23,7 @@ But you can run it with a simple "node server.js" from the root directory
 - ~~Coloring the polygons depending on their hight.~~
 - ~~Control the Strength of the noise applied to the sphere mesh.~~
 - ~~Go from Geometry to BufferGeometry for performances purpose.~~*
+- ~~The option to visualize the generated planet via AR on a mobile device.~~
 - Fix the resolution problem.
 - Fix the lighting problem.
 - More colors for differents terrain types. ( biomes maybe ? )
