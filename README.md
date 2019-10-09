@@ -38,10 +38,10 @@ But you can run it with a simple "node server.js" from the root directory
 
 
 ##### Pros :
-- Is using P5 to interface datas to webGL
+- Is not using P5 anymore, to interface datas to WebGL.
 - Homemade algorythm to calculate the verteces of the sphere.
 ( Régular 3D sphere methods uses triangles strips or non linear space division wich makes the spheres have way more triangle on the poles than on the ecuador )
 
 ##### Cons :
-- Is usin p5 to interface datas to webGL
+- Is not using p5 anymore, to interface datas to WebGL.
 ( P5 is great, maybe my favorite framework but has some lacks on 3D when rendering an unreasonable amount of polygons )
