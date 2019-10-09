@@ -31,6 +31,7 @@ But you can run it with a simple "node server.js" from the root directory
 - A LOD systèm where the resolution of the planet change depending on the distance.
 - Rendering only the faces the user can see.
 - Each noise layer can be setup separatly as well as the falloff between each layer.
+- Faux Gravity.
 - Struggle to developp a terrain erosion algorythm.
 - Bouyakasha.
 - Vegetation.
