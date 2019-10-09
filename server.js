@@ -1,18 +1,26 @@
-// const http = require('http')
-// const https = require('https')
+// const http = require("http")
+// const https = require("https")
 // let url = require("url");
 // let fs = require("fs");
-// let bodyparser = require("body-parser");
+const bodyparser = require("body-parser");
 // let session = require("express-session");
-let socket = require("socket.io");
 
 // const EventEmitter = require("events");
 
-let webPort = 3000;
-let express = require("express");
-let app = express();
-let server = app.listen(process.env.PORT || webPort);
-let io = socket(server);
+const webPort = 3000;
+
+const express = require("express");
+const app = express();
+// const app = require("express")();
+const server = app.listen(process.env.PORT || webPort);
+// const server = require("http").createServer(app);
+// server.listen(process.env.PORT || webPort);
+// let socket = require("socket.io");
+// let io = socket(server);
+const io = require("socket.io")(server);
+// const io_emitter = require('socket.io-emitter')({ host: '127.0.0.1', port: 6379 });
+
+let rooms = [];
 let clients = [];
 let planets = [];
 let options = [];
@@ -20,19 +28,25 @@ let options = [];
 
 app.set("view engine", "ejs");
 
+//utilisation body-parser pour recuperer les données venant du client
+app.use(bodyparser.urlencoded({
+  extended: false
+}));
+
+// //Utilisation des session en express
 // app.use(session({
-//   secret: "secret",
+//   secret: 'keyboard cat',
 //   resave: false,
 //   saveUninitialized: true
 // }))
 
-app.use(express.static("public"/*, { dotfiles: 'allow' }*/));
+app.use(express.static("public"/*, { dotfiles: "allow" }*/));
 
 app.get("/", (req, res) => {
 	// const sess = req.session;
 
 	res.render("generator", {
-		// posts: data.posts
+		// datas: datas,
 	});
 });
 
@@ -40,125 +54,70 @@ app.get("/ar", (req, res) => {
 	// const sess = req.session;
 
 	res.render("ar", {
-		// posts: data.posts
+		// datas: datas,
 	});
 });
 
 // app.get("/ar/:id", (req, res) => {
 app.post("/ar", (req, res) => {
-	// const sess = req.session;
+	// const session = req.session;
+	// console.log("Session : ", session);
 
-	const options = {
-		space: {
-			ambientLight: 0.0,
-			// ambientLight: 1.0,
-			directionnalLight: 0.3,
-			// pointLights: 1.0,
-			pointLights: 0.005,
-		},
-		planete: {
-			size: 1,
-			resolution: 24,
-			// resolution: 8,
-			showWater: true,
-			// showWater: false,
-			// abyssesLevel: 0.40,
-			abyssesLevel: 0.33,
-			// waterLevel: 0.56,
-			waterLevel: 0.50,
-			groundLevel: 1,
-			// waterLevel: 1,
-		},
-		noise_beta: {
-			seed: "seed",
-			// scale: 0.12,
-			offset: 300,
-			scale: 0.15,
-			// scale: 0.015,
-			octave: 4,
-			// octave: 1,
-			falloff: 0.5,
-			// falloff: 1,
-			// strength: 0.25,
-			// strength: 1,
-			strength: 0.4,
-		},
-	};
+	// console.log("Req : ", req);
+
+	const roomId = req.body.id;
 
 	res.render("arx", {
-		options: options,
-		// posts: data.posts
+		roomId: roomId,
 	});
 });
 
-// app.get("/ar/:id", (req, res) => {
-app.get("/arx", (req, res) => {
-	// const sess = req.session;
+io.on("connection", (client) => {
+	console.log(client.id + " // Connected !");
 
-	const options = {
-		space: {
-			ambientLight: 0.0,
-			// ambientLight: 1.0,
-			directionnalLight: 0.3,
-			// pointLights: 1.0,
-			pointLights: 0.005,
-		},
-		planete: {
-			size: 1,
-			resolution: 24,
-			// resolution: 8,
-			showWater: true,
-			// showWater: false,
-			// abyssesLevel: 0.40,
-			abyssesLevel: 0.33,
-			// waterLevel: 0.56,
-			waterLevel: 0.50,
-			groundLevel: 1,
-			// waterLevel: 1,
-		},
-		noise_beta: {
-			seed: "seed",
-			// scale: 0.12,
-			offset: 300,
-			scale: 0.15,
-			// scale: 0.015,
-			octave: 4,
-			// octave: 1,
-			falloff: 0.5,
-			// falloff: 1,
-			// strength: 0.25,
-			// strength: 1,
-			strength: 0.4,
-		},
-	};
+	clients.push(client);
+	rooms.push(client.id);
 
-	res.render("arx", {
-		options: options,
-		// posts: data.posts
+	// client.join('room 237', () => {
+	//     let rooms = Object.keys(client.rooms);
+	//     console.log(rooms); // [ <client.id>, 'room 237' ]
+	// });
+	// console.log("New connected users list : ", allClients);
+	// console.log("New rooms list : ", allClients);
+		
+	// // sending to the client
+	// client.emit("hello", "can you hear me?", 1, 2, "abc");
+
+	// // sending to all clients except sender
+	// client.broadcast.emit("broadcast", "hello friends!");
+	
+	client.on("disconnect", (reason) => {
+		console.log(client.id + " // Got disconnect ! // reason : " + reason);
+		const clientI = clients.indexOf(client);
+		clients.splice(clientI, 1);
+		const roomI = clients.indexOf(client);
+		rooms.splice(roomI, 1);
+		// console.log("New connected users list : ", allClients);
+		// console.log("New rooms list : ", allClients);
+	});	
+
+	client.on("error", (error) => {
+		console.log("Error : ", error);
 	});
-});
 
-io.on('connection', (socket) => {
-  console.log("--- // Nouvelle connection");
-  console.log("Connection ID : " + socket.id);
+	client.on("updateOptions", (datas) => {
+		//client.emit("updateOptions", datas);
+		client.broadcast.emit("updateOptions", datas);
+	});
 
-  clients.push(socket);
-  // console.log("New connected users list : ");
-  // console.log(clients);
-
-  socket.on('updateOptions', function updateOptionsData(data) {
-    //socket.emit('updateOptions', data);
-    socket.broadcast.emit('updateOptions', data);
-  });
-
-  socket.on('disconnect', () => {
-    console.log(socket.id + ' // Got disconnect!');
-    var i = clients.indexOf(socket);
-
-    clients.splice(i, 1);
-    // console.log("New connected users list : ");
-    // console.log(allClients);
-  });
+	client.on("joinARoom", (roomId) => {
+		console.log("Client wants to join room : ", roomId);
+		if(rooms.includes(roomId)){
+			client.join(roomId);
+		} else {
+			client.emit("socketError", "This room does not exist");
+		}
+	});
 
 });
 

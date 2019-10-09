@@ -8,14 +8,13 @@ function setupUI(options) {
 	const exportButton = {
 		get: () => { console.log("get button clicked"); },
 		post: () => { console.log("post button clicked"); },
-		shortlink: () => { 
-			console.log("shortlink button clicked");
-			alert(`Your link to AR this planet is : https://localhost:3000/ar`);
+		roomID: () => { 
+			logSocketId();
 		},
 	};
 	// exportToAR.add(exportButton, 'get').name('Get');
 	// exportToAR.add(exportButton, 'post').name('Post');
-	exportToAR.add(exportButton, 'shortlink').name('Shortlink');
+	exportToAR.add(exportButton, 'roomID').name('roomID');
 	// exportToAR.open();
 
 	// const spaceGui = gui.addFolder('Space');
