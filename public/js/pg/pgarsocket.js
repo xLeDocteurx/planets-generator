@@ -42,6 +42,7 @@ socket.on("socketError", receivedSocketError);
 socket.emit("joinARoom", roomId);
 
 function receivedOptions(newOptions) {
+	// console.log("The room received new options");
 	options = newOptions;
 }
 

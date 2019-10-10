@@ -102,15 +102,17 @@ io.on("connection", (client) => {
 	});
 
 	client.on("updateOptions", (options) => {
-		//client.emit("updateOptions", options);
+		// console.log("The room " + client.id + " is updating options");
 		client.to(client.id).broadcast.emit("updateOptions", options);
 	});
 
 	client.on("joinARoom", (roomId) => {
-		console.log("Client wants to join room : ", roomId);
+		// console.log("Client wants to join room : ", roomId);
 		if(rooms.includes(roomId)){
+			// console.log("The room does exist");
 			client.join(roomId);
 		} else {
+			// console.log("The room does not exist");
 			client.emit("socketError", "This room does not exist");
 		}
 	});
