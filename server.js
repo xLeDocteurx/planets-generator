@@ -18,10 +18,11 @@ const server = app.listen(process.env.PORT || webPort);
 // let socket = require("socket.io");
 // let io = socket(server);
 const io = require("socket.io")(server);
+// io.engine.generateId = (req) => {
+// 	return clients.length < 1 ? 0 : clients[clients.length - 1].id + 1;
+// }
+
 // const io_emitter = require('socket.io-emitter')({ host: '127.0.0.1', port: 6379 });
-io.engine.generateId = (req) => {
-	return clients.length < 1 ? 0 : clients[clients.length - 1].id + 1;
-}
 
 let rooms = [];
 let clients = [];
