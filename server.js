@@ -31,14 +31,14 @@ let options = [];
 
 app.set("view engine", "ejs");
 
-// function requireHTTPS(req, res, next) {
-//   // The 'x-forwarded-proto' check is for Heroku
-//   if (!req.secure && req.get('x-forwarded-proto') !== 'https' && process.env.NODE_ENV !== "development") {
-//     return res.redirect('https://' + req.get('host') + req.url);
-//   }
-//   next();
-// }
-// app.use(requireHTTPS);
+function requireHTTPS(req, res, next) {
+  // The 'x-forwarded-proto' check is for Heroku
+  if (!req.secure && req.get('x-forwarded-proto') !== 'https' && process.env.NODE_ENV !== "development") {
+    return res.redirect('https://' + req.get('host') + req.url);
+  }
+  next();
+}
+app.use(requireHTTPS);
 
 //utilisation body-parser pour recuperer les données venant du client
 app.use(bodyparser.urlencoded({
