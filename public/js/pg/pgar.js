@@ -189,7 +189,7 @@ function init() {
     });
     const toonMaterial = new THREE.MeshToonMaterial({
         color: 0x8C3B0C,
-        gradientMap: new THREE.TextureLoader().load("assets/sf-lightblue/threeTone.png"),
+        gradientMap: new THREE.TextureLoader().load("/assets/threeTone.jpg"),
         // wireframe: true,
         side: THREE.DoubleSide,
         flatShading: true

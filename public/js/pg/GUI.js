@@ -6,16 +6,25 @@ function setupUI(options) {
 	
 	const exportToAR = gui.addFolder('Export to AR');
 	const exportButton = {
-		get: () => { console.log("get button clicked"); },
-		post: () => { console.log("post button clicked"); },
+		QRcode: () => {
+			if(document.getElementById("qrcode").style.display != "block"){
+				const url = `https://${window.location.host}/ar/${returnSocketId()}`;
+				console.log(url);
+				new QRCode(document.getElementById("qrcode"), url);
+				document.getElementById("qrcode").style.display = "block";
+			} else {
+				document.getElementById("qrcode").innerHTML = '';
+				document.getElementById("qrcode").style.display = "none";
+			}
+		},
 		roomID: () => { 
 			logSocketId();
 		},
 	};
 	// exportToAR.add(exportButton, 'get').name('Get');
-	// exportToAR.add(exportButton, 'post').name('Post');
-	exportToAR.add(exportButton, 'roomID').name('roomID');
-	// exportToAR.open();
+	exportToAR.add(exportButton, 'QRcode').name('Get QRcode');
+	exportToAR.add(exportButton, 'roomID').name('Get roomID');
+	exportToAR.open();
 
 	// const spaceGui = gui.addFolder('Space');
 	// // spaceGui.add(options.space, 'ambientLight', 0, 2).name('ambientLight').step(0.01).onChange(() => {

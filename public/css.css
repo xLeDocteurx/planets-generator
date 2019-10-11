@@ -8,10 +8,22 @@ canvas {
 }
 
 a{
-color:brown;
-font-weight:bold;
-text-decoration:none;
+	color:brown;
+	font-weight:bold;
+	text-decoration:none;
 }
-a:hover{color:red;}
-a:active{color:blue;}
+a:hover
+	color:red;
+}
+a:active{
+	color:blue;
+}
 
+#qrcode {
+	display: none;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	margin-top: -128px;
+	margin-left: -128px;
+}

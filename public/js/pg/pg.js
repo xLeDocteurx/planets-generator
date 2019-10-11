@@ -123,7 +123,7 @@ function setup() {
 		// opacity: 0.85,
       	// transparent: true,
 		// color: 0x8C3B0C,
-		// gradientMap: new THREE.TextureLoader().load("assets/sf-lightblue/threeTone.png"),
+		// gradientMap: new THREE.TextureLoader().load("assets/threeTone.jpg"),
 		vertexColors: THREE.VertexColors,
 		// emissive: 0x072534,
 		side: THREE.DoubleSide,
@@ -140,7 +140,7 @@ function setup() {
 
 }
 
-// Game's logic loop
+// Calculations/Game's logic loop
 const update = function(){
 	// planete.computed.rotation.x += 0.0025;
 	// planete.computed.rotation.y += 0.0025;
@@ -154,10 +154,16 @@ const render = function(){
 }
 
 const gameLoop = function(){
-	requestAnimationFrame(gameLoop);
+	// requestAnimationFrame(gameLoop);
+
+	stats_begin();
 
 	update();
 	render();
+	
+	stats_end();
+
+	requestAnimationFrame(gameLoop);
 }
 gameLoop();
 

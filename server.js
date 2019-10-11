@@ -3,15 +3,13 @@
 // let url = require("url");
 // let fs = require("fs");
 const bodyparser = require("body-parser");
-// let session = require("express-session");
-
-// const EventEmitter = require("events");
 
 const webPort = 3000;
 
 const express = require("express");
 const app = express();
 // const app = require("express")();
+// let session = require("express-session");
 const server = app.listen(process.env.PORT || webPort);
 // const server = require("http").createServer(app);
 // server.listen(process.env.PORT || webPort);
@@ -23,6 +21,7 @@ const io = require("socket.io")(server);
 // }
 
 // const io_emitter = require('socket.io-emitter')({ host: '127.0.0.1', port: 6379 });
+// const EventEmitter = require("events");
 
 let rooms = [];
 let clients = [];
@@ -31,6 +30,15 @@ let options = [];
 
 
 app.set("view engine", "ejs");
+
+// function requireHTTPS(req, res, next) {
+//   // The 'x-forwarded-proto' check is for Heroku
+//   if (!req.secure && req.get('x-forwarded-proto') !== 'https' && process.env.NODE_ENV !== "development") {
+//     return res.redirect('https://' + req.get('host') + req.url);
+//   }
+//   next();
+// }
+// app.use(requireHTTPS);
 
 //utilisation body-parser pour recuperer les données venant du client
 app.use(bodyparser.urlencoded({
@@ -45,6 +53,8 @@ app.use(bodyparser.urlencoded({
 // }))
 
 app.use(express.static("public"/*, { dotfiles: "allow" }*/));
+// app.use(express.static("/*", "public"/*, { dotfiles: "allow" }*/));
+app.use("/ar/:roomId", express.static("public"/*, { dotfiles: "allow" }*/));
 
 app.get("/", (req, res) => {
 	// const sess = req.session;
@@ -55,14 +65,12 @@ app.get("/", (req, res) => {
 });
 
 app.get("/ar", (req, res) => {
-	// const sess = req.session;
 
 	res.render("ar", {
 		// datas: datas,
 	});
 });
 
-// app.get("/ar/:id", (req, res) => {
 app.post("/ar", (req, res) => {
 	// const session = req.session;
 	// console.log("Session : ", session);
@@ -76,21 +84,26 @@ app.post("/ar", (req, res) => {
 	});
 });
 
+app.get("/ar/:roomId", (req, res) => {
+	// const session = req.session;
+	// console.log("Session : ", session);
+
+	// console.log("Req : ", req);
+
+  	// const id = htmlspecialchars(req.params.id);
+  	const roomId = req.params.roomId;
+
+	res.render("arx", {
+		roomId: roomId,
+	});
+});
+
 io.on("connection", (client) => {
 	console.log(client.id + " // Connected !");
 
 	clients.push(client);
 	rooms.push(client.id);
 
-	// console.log("New connected users list : ", allClients);
-	// console.log("New rooms list : ", allClients);
-		
-	// // sending to the client
-	// client.emit("hello", "can you hear me?", 1, 2, "abc");
-
-	// // sending to all clients except sender
-	// client.broadcast.emit("broadcast", "hello friends!");
-	
 	client.on("disconnect", (reason) => {
 		console.log(client.id + " // Got disconnect ! // reason : " + reason);
 		const clientI = clients.indexOf(client);

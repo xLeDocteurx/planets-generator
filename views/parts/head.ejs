@@ -6,27 +6,34 @@
 	<title>Planets Generator</title>
 
 	<!-- I keep those imports, just in case -->
-	<!-- <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.css"> -->
-	<!-- <script language="javascript" type="text/javascript" src="./node_modules/jquery/dist/jquery.js"></script> -->
-	<!-- <script language="javascript" type="text/javascript" src="./node_modules/bootstrap/dist/js/bootstrap.js"></script> -->
-	<!-- <script language="javascript" type="text/javascript" src="./js/lodash/core.js"></script> -->
-	<link rel="stylesheet" href="./css.css">
+	<!-- <link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.css"> -->
+	<!-- <script language="javascript" type="text/javascript" src="/node_modules/jquery/dist/jquery.js"></script> -->
+	<!-- <script language="javascript" type="text/javascript" src="/node_modules/bootstrap/dist/js/bootstrap.js"></script> -->
+	<!-- <script language="javascript" type="text/javascript" src="/js/lodash/core.js"></script> -->
+	<link rel="stylesheet" href="/css.css">
 
 	<!-- Three.js -->
-	<script language="javascript" type="text/javascript" src="./js/three.js"></script>
+	<script language="javascript" type="text/javascript" src="/js/three.js"></script>
 	<!-- Cam library -->
-	<script language="javascript" type="text/javascript" src="./js/OrbitControls.js"></script>
+	<script language="javascript" type="text/javascript" src="/js/OrbitControls.js"></script>
 	<!-- UI library -->
-	<script language="javascript" type="text/javascript" src="./js/dat.gui.min.js"></script>
-	<!-- Monitoring library -->
+	<script language="javascript" type="text/javascript" src="/js/dat.gui.min.js"></script>
+	<!-- Stats library -->
+	<script language="javascript" type="text/javascript" src="/js/stats.js"></script>
+	<!-- QRcode library -->
+	<script language="javascript" type="text/javascript" src="/js/qrcode.js"></script>
 	
 	<!-- Noise functions extracted from P5.js wich was too heavy and in conflict with Three.js -->
-	<script language="javascript" type="text/javascript" src="./js/pg/noise.js"></script>
+	<script language="javascript" type="text/javascript" src="/js/pg/noise.js"></script>
+	<!-- Class for the performance monitoring -->
+	<script language="javascript" type="text/javascript" src="/js/pg/STATS.js"></script>
 	<!-- Class for the GUI -->
-	<script language="javascript" type="text/javascript" src="./js/pg/GUI.js"></script>
+	<script language="javascript" type="text/javascript" src="/js/pg/GUI.js"></script>
 	<!-- Class for the skybox -->
-	<script language="javascript" type="text/javascript" src="./js/pg/Skybox.js"></script>
+	<script language="javascript" type="text/javascript" src="/js/pg/Skybox.js"></script>
 	<!-- Class for the planete -->
-	<script language="javascript" type="text/javascript" src="./js/pg/Planete.js"></script>
+	<script language="javascript" type="text/javascript" src="/js/pg/Planete.js"></script>
 </head>
 <body>
+
+<div id="qrcode"></div>
