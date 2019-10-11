@@ -44,6 +44,7 @@ socket.emit("joinARoom", roomId);
 function receivedOptions(newOptions) {
 	// console.log("The room received new options");
 	options = newOptions;
+	planete.redraw(options.planete, options.noise_beta);
 }
 
 function receivedSocketError(errorMessage){
