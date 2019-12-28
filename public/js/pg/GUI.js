@@ -81,7 +81,7 @@ function setupUI(options) {
 		updateOptions(options);
 	});
 	// noiseBetaGui.add(options.noise_beta, 'scale', 0.01, 0.5).onChange(() => {
-	noiseBetaGui.add(options.noise_beta, 'scale', 0.01, 0.2).onChange(() => {
+	noiseBetaGui.add(options.noise_beta, 'scale', 1.0, 5.0).onChange(() => {
 		planete.redraw(options.planete, options.noise_beta);
 		updateOptions(options);
 	});

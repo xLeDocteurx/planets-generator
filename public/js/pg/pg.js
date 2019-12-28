@@ -29,6 +29,7 @@ let options = {
 	},
 	planete: {
 		size: 1,
+		// resolution: 64,
 		resolution: 24,
 		// resolution: 8,
 		showWater: true,
@@ -41,10 +42,10 @@ let options = {
 		// waterLevel: 1,
 	},
 	noise_beta: {
-		seed: "seed",
+		seed: 5334,
 		// scale: 0.12,
 		offset: 300,
-		scale: 0.15,
+		scale: 2.3,
 		// scale: 0.015,
 		octave: 4,
 		// octave: 1,
