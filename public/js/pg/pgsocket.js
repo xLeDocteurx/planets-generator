@@ -10,5 +10,6 @@ function returnSocketId() {
 }
 
 function updateOptions(options) {
+	console.log("I am transmiting these options : ", options)
 	socket.emit("updateOptions", options);
 }

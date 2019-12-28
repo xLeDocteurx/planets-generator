@@ -4,7 +4,7 @@
 // let fs = require("fs");
 const bodyparser = require("body-parser");
 
-const webPort = 3000;
+const webPort = 3030;
 
 const express = require("express");
 const app = express();
@@ -120,7 +120,9 @@ io.on("connection", (client) => {
 
 	client.on("updateOptions", (options) => {
 		// console.log("The room " + client.id + " is updating options");
-		clients[client.id].lastOptions = options;
+		
+		// clients[client.id].lastOptions = options;
+
 		client.to(client.id).broadcast.emit("updateOptions", options);
 	});
 
